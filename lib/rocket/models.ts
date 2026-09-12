@@ -145,6 +145,34 @@ function nose(
   }
   return mesh(new T.LatheGeometry(pts, 48), mat, parent);
 }
+function finGeometry(r: Rocket) {
+  const rad = r.diameter / 2,
+    shape = new T.Shape();
+  shape.moveTo(rad * 0.8, 0.012);
+  shape.lineTo(rad + r.finSpan, 0);
+  shape.lineTo(rad + r.finSpan * 0.85, r.finHeight * 0.43);
+  shape.lineTo(rad, r.finHeight);
+  shape.closePath();
+  return new T.ExtrudeGeometry(shape, {
+    depth: Math.min(0.002, r.diameter * 0.04),
+    bevelEnabled: true,
+    bevelSize: 0.0005,
+    bevelThickness: 0.0005,
+    bevelSegments: 1,
+    steps: 1,
+  });
+}
+function transparentFins() {
+  return new T.MeshStandardMaterial({
+    color: "#d1e5e1",
+    transparent: true,
+    opacity: 0.28,
+    roughness: 0.18,
+    metalness: 0.1,
+    side: T.DoubleSide,
+    depthWrite: false,
+  });
+}
 export function createRocket(r: Rocket) {
   const root = new T.Group(),
     body = new T.Group(),
@@ -241,22 +269,12 @@ export function createRocket(r: Rocket) {
       r.id === "bertha" ? "round" : "ogive",
     );
   }
-  const finShape = new T.Shape();
-  finShape.moveTo(rad * 0.8, 0.012);
-  finShape.lineTo(rad + r.finSpan, 0);
-  finShape.lineTo(rad + r.finSpan * 0.85, r.finHeight * 0.43);
-  finShape.lineTo(rad, r.finHeight);
-  finShape.closePath();
-  const finGeo = new T.ExtrudeGeometry(finShape, {
-    depth: Math.min(0.002, r.diameter * 0.04),
-    bevelEnabled: true,
-    bevelSize: 0.0005,
-    bevelThickness: 0.0005,
-    bevelSegments: 1,
-    steps: 1,
-  });
+  const finGeo = finGeometry(r);
+  const finMaterial = ["saturn", "falcon", "atlas"].includes(r.shape ?? "")
+    ? transparentFins()
+    : accent;
   for (let i = 0; i < r.fins; i++) {
-    const f = mesh(finGeo, accent, body);
+    const f = mesh(finGeo, finMaterial, body);
     f.rotation.y = (i * Math.PI * 2) / r.fins;
   }
   if (r.id === "bullpup" || r.id === "nova") {
@@ -372,6 +390,14 @@ export async function loadRocketAsset(r: Rocket): Promise<T.Group | null> {
         });
       }
     });
+  }
+  if (r.shape === "falcon" || r.shape === "saturn") {
+    const geo = finGeometry(r),
+      mat = transparentFins();
+    for (let i = 0; i < r.fins; i++) {
+      const fin = mesh(geo, mat, loaded);
+      fin.rotation.y = (i * Math.PI * 2) / r.fins;
+    }
   }
   loaded.userData = { imported: true, rocket: r };
   return loaded;

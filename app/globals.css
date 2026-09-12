@@ -2242,3 +2242,131 @@ body {
     font-size: 9px;
   }
 }
+
+.flight-analysis {
+  border: 1px solid #d9e4c820;
+  border-radius: 6px;
+  background: #14241b35;
+  padding: 13px;
+  margin-bottom: 16px;
+}
+.analysis-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+.analysis-heading strong {
+  color: #c5d7a2;
+  font: 14px var(--font-mono);
+}
+.analysis-heading .marginal {
+  color: #f2ba70;
+}
+.balance-bar {
+  position: relative;
+  height: 3px;
+  background: #8397744d;
+  margin: 29px 5px 9px;
+}
+.balance-bar span {
+  position: absolute;
+  top: -19px;
+  transform: translateX(-50%);
+  font: 10px monospace;
+  color: #d8e5c4;
+}
+.balance-bar span:after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 17px;
+  height: 7px;
+  width: 7px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: #d9be7e;
+}
+.balance-bar .cp-marker:after {
+  background: transparent;
+  border: 1px solid #c2d8a0;
+  border-radius: 0;
+  transform: translateX(-50%) rotate(45deg);
+}
+.balance-endpoints {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: #819478;
+}
+.analysis-values {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 8px;
+  margin: 13px 0;
+}
+.analysis-values dt {
+  font-size: 11px;
+  color: #99ae8a;
+}
+.analysis-values dd {
+  font: 12px var(--font-mono);
+  margin: 4px 0 0;
+  color: #e4e9d7;
+}
+.flight-analysis p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #aabc97;
+}
+.analysis-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: space-between;
+  margin-top: 13px;
+}
+.analysis-links button,
+.analysis-links a {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  background: transparent;
+  padding: 0;
+  color: #d8c28e;
+  font-size: 12px;
+}
+.flight-observation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin: 17px 0;
+  color: #d0dfbb;
+}
+.flight-observation strong {
+  font-size: 14px;
+  font-weight: 500;
+}
+.flight-observation span {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #96ae87;
+  width: 100%;
+  margin-left: 26px;
+}
+@media (max-width: 700px) {
+  .flight-analysis {
+    grid-column: 1/-1;
+  }
+  .flight-observation {
+    margin: 8px 0;
+  }
+  .flight-observation span {
+    width: auto;
+    margin-left: auto;
+  }
+  .analysis-values dt {
+    font-size: 12px;
+  }
+}
