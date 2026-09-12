@@ -84,6 +84,7 @@ while (offset < batch.length) {
       const email = match[1];
       if (
         !email.endsWith("@users.noreply.github.com") &&
+        email !== "noreply@github.com" &&
         email !== "contributors@example.invalid"
       )
         findings.add(
