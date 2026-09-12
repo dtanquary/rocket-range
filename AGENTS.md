@@ -35,6 +35,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - Engines must be from the selected rocket's compatible list. Changing a rocket clears preparation and resets its recommended engine.
 - Require engine loading, pad placement, and controller arming before ignition.
 - The launch button ignites immediately. Never allow configuration changes or other user actions to mutate a flight in progress.
+- Ignition must preserve the user's selected camera mode, whether triggered by the launch button or Space. Do not automatically switch to Follow at launch.
 - Thrust ends at burnout. Ejection delay starts at burnout, not ignition or apogee.
 - Gravity, changing propellant mass, air-relative drag, wind drift, and parachute inflation affect flight.
 - Landed altitude must be zero. Flight reports must use actual recorded telemetry.
