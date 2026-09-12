@@ -64,7 +64,7 @@ export function createRocket(r:Rocket){
   if(r.shape==='falcon'){for(let i=0;i<4;i++){const a=i*Math.PI/2;beam(body,new T.Vector3(Math.cos(a)*rad,bh*.19,Math.sin(a)*rad),new T.Vector3(Math.cos(a)*rad*1.3,.025,Math.sin(a)*rad*1.3),.005,accent);}}
   root.traverse(o=>{o.castShadow=true;o.receiveShadow=true;});return root;
 }
-export const MODEL_PATHS:Record<string,string>={saturn:'/models/saturn-v.glb',redstone:'/models/mercury-redstone.glb',atlas:'/models/mercury-atlas.glb'};
+export const MODEL_PATHS:Record<string,string>={falcon:'/models/falcon-9.glb',saturn:'/models/saturn-v.glb',redstone:'/models/mercury-redstone.glb',atlas:'/models/mercury-atlas.glb'};
 const cache=new Map<string,Promise<T.Group>>();
 export async function loadRocketAsset(r:Rocket):Promise<T.Group|null>{
   const path=MODEL_PATHS[r.id];if(!path)return null;
@@ -73,11 +73,27 @@ export async function loadRocketAsset(r:Rocket):Promise<T.Group|null>{
     // Source assets use different up axes; normalize the longest axis to Y.
     if(s.z>s.y&&s.z>s.x)model.rotation.x=-Math.PI/2;else if(s.x>s.y)model.rotation.z=Math.PI/2;
     model.updateMatrixWorld(true);b=new T.Box3().setFromObject(model);s=b.getSize(new T.Vector3());
-    model.scale.multiplyScalar(r.length/s.y);model.updateMatrixWorld(true);b=new T.Box3().setFromObject(model);
+    const targetHeight=(r.shape==='redstone'||r.shape==='atlas')?r.length*r.noseRatio*.33:r.length;
+    model.scale.multiplyScalar(targetHeight/s.y);model.updateMatrixWorld(true);b=new T.Box3().setFromObject(model);
     const center=b.getCenter(new T.Vector3());model.position.sub(new T.Vector3(center.x,b.min.y,center.z));
     const wrapper=new T.Group();wrapper.add(model);wrapper.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=true;o.receiveShadow=true;}});return wrapper;
   }).catch(e=>{cache.delete(path);throw e;}));
-  const loaded=(await cache.get(path)!).clone(true);loaded.userData={imported:true,rocket:r};return loaded;
+  const loaded=(await cache.get(path)!).clone(true);
+  if(r.shape==='redstone'||r.shape==='atlas'){
+    const complete=createRocket(r);const cap=complete.userData.cap as T.Group;
+    const existingCapsule=cap.children[1];if(existingCapsule)cap.remove(existingCapsule);
+    loaded.position.y=r.shape==='atlas'?r.length*r.noseRatio*.28:0;
+    cap.add(loaded);return complete;
+  }
+  if(r.shape==='falcon'){
+    // The reusable STL has no paint: add a white-and-black model-scale livery.
+    loaded.updateMatrixWorld(true);
+    loaded.traverse(o=>{if(o instanceof T.Mesh){const geo=o.geometry.clone();const pos=geo.attributes.position;const colors=new Float32Array(pos.count*3);const v=new T.Vector3(),c=new T.Color();
+      for(let i=0;i<pos.count;i++){v.fromBufferAttribute(pos,i).applyMatrix4(o.matrixWorld);const y=v.y/r.length;const black=y<.06||(y>.68&&y<.735);c.set(black?'#20242a':'#eeeae0');colors.set([c.r,c.g,c.b],i*3);}
+      geo.setAttribute('color',new T.BufferAttribute(colors,3));o.geometry=geo;o.material=new T.MeshStandardMaterial({vertexColors:true,roughness:.35,metalness:.12});
+    }});
+  }
+  loaded.userData={imported:true,rocket:r};return loaded;
 }
 export function createPad(large=false){
   const g=new T.Group(),mat=large?materials.black:materials.red;
