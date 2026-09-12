@@ -61,6 +61,10 @@ export default function Field(props: FieldProps) {
     renderer.toneMappingExposure = 1.12;
     renderer.outputColorSpace = T.SRGBColorSpace;
     renderer.localClippingEnabled = true;
+    renderer.debug.onShaderError = () =>
+      latest.current.onError(
+        "Your graphics driver could not render the field. Try a current browser with hardware acceleration enabled.",
+      );
     el.appendChild(renderer.domElement);
     const scene = new T.Scene();
     const environment = buildEnvironment(scene);
@@ -352,8 +356,15 @@ export default function Field(props: FieldProps) {
         : new T.Vector3(1.24, 0.73, 0.33);
       target.copy(base);
       if (flying) target.add(new T.Vector3(flight.x, flight.y, flight.z));
+      if (p.stage === "landed")
+        target.y = p.rocket.diameter / 2 + p.rocket.finSpan * 0.65;
       rocketRoot.position.lerp(target, flying ? 1 : Math.min(1, dt * 5));
-      let angle = mounted ? (-p.conditions.angle * Math.PI) / 180 : 0;
+      const angle =
+        p.stage === "landed"
+          ? Math.PI / 2
+          : mounted
+            ? (-p.conditions.angle * Math.PI) / 180
+            : 0;
       if (
         flying &&
         flight.phase === "coast" &&
@@ -410,7 +421,17 @@ export default function Field(props: FieldProps) {
           p.stage === "landed" ? 0.06 : Math.max(0.01, inflation),
           Math.max(0.01, inflation),
         );
-        if (p.stage === "landed") chute.position.y = 0.02;
+        chute.rotation.z = p.stage === "landed" ? -Math.PI / 2 : 0;
+        if (p.stage === "landed")
+          chute.position.set(
+            -target.y + 0.02,
+            p.rocket.length * 0.6,
+            p.rocket.chute * 0.8,
+          );
+        else {
+          chute.position.x = 0;
+          chute.position.z = 0;
+        }
       }
       if (rocketVisual) {
         const cap = rocketVisual.userData.cap as T.Group | undefined;

@@ -64,6 +64,14 @@ function fmt(n: number, digits = 0) {
   });
 }
 let audioCtx: AudioContext | null = null;
+let masterGain: GainNode | null = null;
+function audioDestination() {
+  if (!masterGain && audioCtx) {
+    masterGain = audioCtx.createGain();
+    masterGain.connect(audioCtx.destination);
+  }
+  return masterGain!;
+}
 function beep(frequency = 660, duration = 0.09, volume = 0.06) {
   try {
     audioCtx ??= new AudioContext();
@@ -72,7 +80,7 @@ function beep(frequency = 660, duration = 0.09, volume = 0.06) {
       g = audioCtx.createGain();
     o.frequency.value = frequency;
     o.connect(g);
-    g.connect(audioCtx.destination);
+    g.connect(audioDestination());
     g.gain.setValueAtTime(volume, audioCtx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
     o.start();
@@ -98,7 +106,7 @@ function roar(duration: number) {
     filter.frequency.value = 1100;
     s.connect(filter);
     filter.connect(g);
-    g.connect(audioCtx.destination);
+    g.connect(audioDestination());
     g.gain.setValueAtTime(0.01, audioCtx.currentTime);
     g.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
     g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
@@ -132,6 +140,14 @@ export default function RocketRange() {
   const [tab, setTab] = useState<
     "All rockets" | "Estes classics" | "Scale fleet"
   >("All rockets");
+  useEffect(() => {
+    if (masterGain && audioCtx)
+      masterGain.gain.setTargetAtTime(
+        sound && !paused ? 1 : 0,
+        audioCtx.currentTime,
+        0.03,
+      );
+  }, [sound, paused]);
   const rocket = ROCKETS.find((r) => r.id === rocketId)!,
     motor = getMotor(motorId);
   const prediction = useMemo(
