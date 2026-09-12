@@ -15,6 +15,9 @@ import {
 import { ROCKETS, type Rocket, type Motor } from "@/lib/rocket/catalog";
 import {
   newFlight,
+  flightConfiguration,
+  launchAxis,
+  windAt,
   stepFlight,
   type FlightState,
   type Conditions,
@@ -89,6 +92,7 @@ export default function Field(props: FieldProps) {
       frame = 0,
       disposed = false,
       loadId = 0;
+    let flightConfig: ReturnType<typeof flightConfiguration> | null = null;
     const retired: T.Object3D[] = [];
     let importedCap: T.Group | null = null;
     const lowerPlane = new T.Plane(),
@@ -294,14 +298,20 @@ export default function Field(props: FieldProps) {
       if (disposed) return;
       frame = requestAnimationFrame(tick);
       const p = latest.current;
-      const dt = Math.min((now - last) / 1000, 0.05);
+      const wallDt = (now - last) / 1000;
+      const dt = Math.min(wallDt, 0.05);
       last = now;
       elapsed += dt;
-      environment.update(elapsed, p.conditions.wind);
+      environment.update(
+        elapsed,
+        p.conditions.wind,
+        p.conditions.windDirection ?? 270,
+      );
       if (activeId !== p.rocket.id) setRocket(p.rocket);
       if (p.stage !== lastStage) {
         if (p.stage === "flight") {
-          flight = newFlight();
+          flightConfig = flightConfiguration(p.rocket, p.motor, p.conditions);
+          flight = newFlight(flightConfig.conditions);
           accumulator = 0;
           trailCount = 0;
           trailTime = 0;
@@ -323,9 +333,15 @@ export default function Field(props: FieldProps) {
         lastStage = p.stage;
       }
       if (p.stage === "flight") {
-        accumulator += dt;
+        accumulator += wallDt;
         while (accumulator >= 1 / 120 && flight.phase !== "landed") {
-          flight = stepFlight(flight, p.rocket, p.motor, p.conditions, 1 / 120);
+          flight = stepFlight(
+            flight,
+            flightConfig!.rocket,
+            flightConfig!.motor,
+            flightConfig!.conditions,
+            1 / 120,
+          );
           accumulator -= 1 / 120;
         }
         if (flight.t - trailTime > 0.09 && trailCount < 9000) {
@@ -364,23 +380,14 @@ export default function Field(props: FieldProps) {
           : mounted
             ? (-p.conditions.angle * Math.PI) / 180
             : 0;
-      if (
-        flying &&
-        flight.phase === "coast" &&
-        Math.hypot(flight.vx, flight.vy, flight.vz) > 0.4
-      ) {
-        vel.set(flight.vx, flight.vy, flight.vz).normalize();
+      if (flying && p.stage !== "landed") {
+        vel.fromArray(flight.axis);
+        desiredQuat.setFromUnitVectors(up, vel);
+      } else if (mounted && p.stage !== "landed") {
+        vel.fromArray(launchAxis(p.conditions));
         desiredQuat.setFromUnitVectors(up, vel);
       } else {
-        desiredQuat.setFromEuler(
-          new T.Euler(
-            0,
-            0,
-            flight.phase === "recovery" && flying
-              ? Math.sin(elapsed * 2) * 0.12
-              : angle,
-          ),
-        );
+        desiredQuat.setFromEuler(new T.Euler(0, 0, angle));
       }
       rocketRoot.quaternion.slerp(desiredQuat, Math.min(1, dt * 5));
       engine.visible = p.stage !== "rocket";
@@ -394,12 +401,17 @@ export default function Field(props: FieldProps) {
         0.027,
         Math.min(1, dt * 4),
       );
-      if (pad?.userData.rod)
-        pad.userData.rod.rotation.z = (-p.conditions.angle * Math.PI) / 180;
+      if (pad?.userData.rod) {
+        pad.userData.rod.quaternion.setFromUnitVectors(
+          up,
+          vel.fromArray(launchAxis(p.conditions)),
+        );
+        pad.userData.rod.scale.y =
+          (p.conditions.rodLength ?? 1) /
+          (p.rocket.motors.some((m) => m.startsWith("E")) ? 1.2 : 1);
+      }
       const recovery = flying && flight.deployedAt !== null;
-      const inflation = recovery
-        ? Math.min(1, (flight.t - flight.deployedAt!) / 0.65)
-        : 0;
+      const inflation = recovery ? flight.inflation : 0;
       tether.visible = recovery;
       const tp = tetherGeometry.attributes.position;
       tp.setXYZ(0, 0, p.rocket.length * 0.7, 0);
@@ -416,8 +428,10 @@ export default function Field(props: FieldProps) {
         chute.visible = recovery;
         chute.position.y = p.rocket.length * 0.9;
         chute.scale.set(
-          Math.max(0.01, inflation),
-          p.stage === "landed" ? 0.06 : Math.max(0.01, inflation),
+          Math.max(0.01, inflation) * (flight.chuteFailed ? 0.35 : 1),
+          p.stage === "landed"
+            ? 0.06
+            : Math.max(0.01, inflation) * (flight.chuteFailed ? 0.25 : 1),
           Math.max(0.01, inflation),
         );
         chute.rotation.z = p.stage === "landed" ? -Math.PI / 2 : 0;
@@ -495,12 +509,17 @@ export default function Field(props: FieldProps) {
         pAge[i] += dt;
         const age = pAge[i];
         if (age < 9) {
-          pPos[i * 3] += (pVel[i * 3] + p.conditions.wind * 0.28) * dt;
+          const smokeWind = windAt(
+            flightConfig?.conditions ?? p.conditions,
+            pPos[i * 3 + 1],
+            flight.t,
+          );
+          pPos[i * 3] += (pVel[i * 3] + smokeWind[0] * 0.28) * dt;
           pPos[i * 3 + 1] = Math.max(
             0.035,
             pPos[i * 3 + 1] + pVel[i * 3 + 1] * dt,
           );
-          pPos[i * 3 + 2] += pVel[i * 3 + 2] * dt;
+          pPos[i * 3 + 2] += (pVel[i * 3 + 2] + smokeWind[2] * 0.28) * dt;
           pSize[i] = 0.035 + age * 0.16;
           pAlpha[i] = Math.max(0, 1 - age / 9) * 0.4;
         } else pAlpha[i] = 0;

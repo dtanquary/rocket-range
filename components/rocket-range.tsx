@@ -41,10 +41,16 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import Field, { type CameraMode, type Stage } from "@/components/rocket/field";
-import { ROCKETS, getMotor, type Rocket } from "@/lib/rocket/catalog";
+import {
+  ROCKETS,
+  getMotor,
+  engineFits,
+  type Rocket,
+} from "@/lib/rocket/catalog";
 import {
   newFlight,
   predict,
+  stabilityOf,
   type Conditions,
   type FlightState,
 } from "@/lib/rocket/physics";
@@ -121,7 +127,11 @@ export default function RocketRange() {
   const [conditions, setConditions] = useState<Conditions>({
       wind: 1.5,
       angle: 0,
-      heading: 0,
+      heading: 270,
+      windDirection: 270,
+      gusts: 0.5,
+      rodLength: 1,
+      ballast: 0,
     }),
     [fleetOpen, setFleetOpen] = useState(false),
     [settingsOpen, setSettingsOpen] = useState(false),
@@ -152,6 +162,18 @@ export default function RocketRange() {
     () => predict(rocket, motor, conditions),
     [rocket, motor, conditions],
   );
+  const balance = useMemo(
+    () => stabilityOf(rocket, motor, conditions),
+    [rocket, motor, conditions],
+  );
+  const recoveryTitle =
+    telemetry.outcome === "recovered"
+      ? "Back on Earth."
+      : telemetry.outcome === "no-liftoff"
+        ? "Stayed on the pad."
+        : telemetry.outcome === "no-recovery"
+          ? "Impact before ejection."
+          : "A hard landing.";
   const busy = stage === "flight" || stage === "countdown",
     loaded = stage !== "rocket",
     mounted = !["rocket", "engine"].includes(stage),
@@ -162,6 +184,7 @@ export default function RocketRange() {
     if (busy) return;
     setRocketId(r.id);
     setMotorId(r.recommended);
+    setConditions((c) => ({ ...c, ballast: 0 }));
     setStage("rocket");
     setTelemetry(newFlight());
     setCamera("orbit");
@@ -232,10 +255,20 @@ export default function RocketRange() {
       ? {
           powered: "POWERED ASCENT",
           coast: telemetry.vy >= 0 ? "COASTING TO APOGEE" : "EJECTION DELAY",
-          recovery: "PARACHUTE DESCENT",
+          recovery: telemetry.chuteFailed
+            ? "CANOPY OVERLOAD"
+            : "PARACHUTE DESCENT",
           landed: "TOUCHDOWN",
         }[telemetry.phase]
-      : STAGE_LABELS[stage];
+      : stage === "landed"
+        ? {
+            recovered: "RECOVERY COMPLETE",
+            "hard-landing": "HARD LANDING",
+            "no-recovery": "IMPACT BEFORE EJECTION",
+            "no-liftoff": "NO LIFTOFF",
+            flying: "TOUCHDOWN",
+          }[telemetry.outcome]
+        : STAGE_LABELS[stage];
   return (
     <main className="range-app">
       <div className="world">
@@ -380,7 +413,7 @@ export default function RocketRange() {
               >
                 <span className="motor-code">{id}</span>
                 <small>
-                  {m.impulse} N·s <span> / </span> {m.delay}s delay
+                  {fmt(m.impulse, 1)} N·s <span> / </span> {m.delay}s delay
                 </small>
                 {id === rocket.recommended && (
                   <span
@@ -399,10 +432,92 @@ export default function RocketRange() {
             {fmt(prediction.apogee)} <small>m</small>
           </strong>
         </div>
+        <div className="flight-analysis">
+          <div className="analysis-heading">
+            <span>Estimated stability</span>
+            <strong className={balance.margin < 1 ? "marginal" : ""}>
+              {fmt(balance.margin, 2)} cal
+            </strong>
+          </div>
+          <div
+            className="balance-bar"
+            role="img"
+            aria-label={`Center of gravity ${fmt(balance.cg * 100, 1)} centimeters from nose, center of pressure ${fmt(balance.cp * 100, 1)} centimeters from nose`}
+          >
+            <span
+              className="cg-marker"
+              style={{ left: `${(balance.cg / rocket.length) * 100}%` }}
+            >
+              CG
+            </span>
+            <span
+              className="cp-marker"
+              style={{ left: `${(balance.cp / rocket.length) * 100}%` }}
+            >
+              CP
+            </span>
+          </div>
+          <div className="balance-endpoints">
+            <span>Nose</span>
+            <span>Tail</span>
+          </div>
+          <dl className="analysis-values">
+            <div>
+              <dt>Launch mass</dt>
+              <dd>{fmt(balance.mass * 1000, 1)} g</dd>
+            </div>
+            <div>
+              <dt>Rod exit</dt>
+              <dd>
+                {prediction.rodExitSpeed === null
+                  ? "—"
+                  : fmt(prediction.rodExitSpeed, 1) + " m/s"}
+              </dd>
+            </div>
+            <div>
+              <dt>Ejection airspeed</dt>
+              <dd>
+                {prediction.deploymentSpeed === null
+                  ? "Before impact: none"
+                  : fmt(prediction.deploymentSpeed, 1) + " m/s"}
+              </dd>
+            </div>
+            <div>
+              <dt>Landing speed</dt>
+              <dd>{fmt(prediction.impactSpeed, 1)} m/s</dd>
+            </div>
+          </dl>
+          <p>
+            {balance.margin <= 0
+              ? "CG behind CP: unstable configuration."
+              : balance.margin < 1
+                ? "Small stability margin: sensitive to disturbances."
+                : balance.margin > 3
+                  ? "Large stability margin: expect weathercocking in wind."
+                  : "CG is ahead of CP."}
+            {prediction.chuteFailed ? " Predicted canopy overload." : ""}
+            {prediction.outcome === "no-recovery"
+              ? " Predicted impact before ejection."
+              : ""}
+          </p>
+          <div className="analysis-links">
+            <button
+              disabled={busy || stage === "armed"}
+              onClick={() => setSettingsOpen(true)}
+            >
+              Adjust launch setup <SlidersHorizontal size={12} />
+            </button>
+            <a href={motor.source} target="_blank" rel="noreferrer">
+              Thrust data <ArrowUpRight size={12} />
+            </a>
+          </div>
+        </div>
         {stage === "rocket" && (
           <button
             className="secondary-action"
+            disabled={!engineFits(rocket, motor)}
             onClick={() => {
+              if (!engineFits(rocket, motor)) return;
               setStage("engine");
               if (sound) beep(880);
             }}
@@ -490,7 +605,8 @@ export default function RocketRange() {
           <span className="weather-divider" />
           <Wind size={18} />
           <span>
-            {fmt(conditions.wind, 1)} m/s <small>W</small>
+            {fmt(conditions.wind, 1)} m/s{" "}
+            <small>from {conditions.windDirection ?? 270}°</small>
           </span>
         </div>
         <button onClick={() => setSettingsOpen(true)}>
@@ -541,18 +657,22 @@ export default function RocketRange() {
           </span>
           <h2>
             {stage === "landed"
-              ? "Back on Earth."
+              ? recoveryTitle
               : telemetry.phase === "recovery"
-                ? "Enjoy the way down."
+                ? telemetry.chuteFailed
+                  ? "Canopy overloaded."
+                  : "Enjoy the way down."
                 : telemetry.phase === "coast"
                   ? "A moment of weightlessness."
                   : "We have liftoff."}
           </h2>
           <p>
             {stage === "landed"
-              ? `${fmt(telemetry.apogee)} m apogee · ${fmt(Math.hypot(telemetry.x, telemetry.z))} m downrange`
+              ? `${fmt(telemetry.apogee)} m apogee · ${fmt(telemetry.impactSpeed, 1)} m/s impact · ${fmt(Math.hypot(telemetry.x, telemetry.z))} m downrange`
               : telemetry.phase === "recovery"
-                ? "Parachute deployed. Following the wind."
+                ? telemetry.chuteFailed
+                  ? "The canopy could not withstand the opening load."
+                  : "Parachute deployed. Following the wind."
                 : telemetry.phase === "coast"
                   ? "Motor burned out. Waiting for recovery ejection."
                   : "Follow your rocket all the way to apogee."}
@@ -626,7 +746,8 @@ export default function RocketRange() {
             <div className="recovered-title">
               <Flag size={18} />
               <strong>
-                Flight {String(flightNumber).padStart(2, "0")} recovered
+                Flight {String(flightNumber).padStart(2, "0")} ·{" "}
+                {telemetry.outcome === "recovered" ? "recovered" : "complete"}
               </strong>
             </div>
             <button className="launch-button" onClick={reset}>
@@ -642,7 +763,9 @@ export default function RocketRange() {
             </div>
             <div className="controller-foot">
               {telemetry.phase === "recovery"
-                ? "Parachute open · recovery in progress"
+                ? telemetry.chuteFailed
+                  ? "Canopy overloaded · tracking descent"
+                  : "Parachute open · recovery in progress"
                 : "Tracking vehicle · radio link active"}
             </div>
           </>
@@ -791,9 +914,10 @@ export default function RocketRange() {
       <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
         <DialogContent className="range-dialog">
           <span className="eyebrow">MAKE IT YOUR FLIGHT</span>
-          <DialogTitle>Field conditions</DialogTitle>
+          <DialogTitle>Launch setup</DialogTitle>
           <DialogDescription>
-            Adjust the breeze and the launch rod before arming.
+            Set the rocket’s balance, wind, and launch rod before arming. After
+            ignition the flight runs on physics alone.
           </DialogDescription>
           <div className="setting-row">
             <label htmlFor="wind">Wind speed</label>
@@ -829,8 +953,96 @@ export default function RocketRange() {
           />
           <div className="slider-endpoints">
             <span>Vertical</span>
-            <span>Downwind</span>
+            <span>10° from vertical</span>
           </div>
+          <div className="setting-row">
+            <label htmlFor="wind-direction">Wind from</label>
+            <strong>{conditions.windDirection ?? 270}°</strong>
+          </div>
+          <Slider
+            id="wind-direction"
+            aria-label="Wind direction"
+            min={0}
+            max={315}
+            step={45}
+            value={[conditions.windDirection ?? 270]}
+            disabled={busy || stage === "armed"}
+            onValueChange={(v) =>
+              setConditions((c) => ({ ...c, windDirection: v[0] }))
+            }
+          />
+          <div className="slider-endpoints">
+            <span>0° north · 90° east</span>
+            <span>180° south · 270° west</span>
+          </div>
+          <div className="setting-row">
+            <label htmlFor="gusts">Gust amplitude</label>
+            <strong>±{fmt(conditions.gusts ?? 0, 1)} m/s</strong>
+          </div>
+          <Slider
+            id="gusts"
+            aria-label="Gust amplitude"
+            min={0}
+            max={3}
+            step={0.25}
+            value={[conditions.gusts ?? 0]}
+            disabled={busy || stage === "armed"}
+            onValueChange={(v) => setConditions((c) => ({ ...c, gusts: v[0] }))}
+          />
+          <div className="setting-row">
+            <label htmlFor="rod-heading">Rod bearing</label>
+            <strong>{conditions.heading}°</strong>
+          </div>
+          <Slider
+            id="rod-heading"
+            aria-label="Launch rod bearing"
+            min={0}
+            max={315}
+            step={45}
+            value={[conditions.heading]}
+            disabled={busy || stage === "armed"}
+            onValueChange={(v) =>
+              setConditions((c) => ({ ...c, heading: v[0] }))
+            }
+          />
+          <div className="setting-row">
+            <label htmlFor="rod-length">Launch rod length</label>
+            <strong>{fmt(conditions.rodLength ?? 1, 1)} m</strong>
+          </div>
+          <Slider
+            id="rod-length"
+            aria-label="Launch rod length"
+            min={0.6}
+            max={1.8}
+            step={0.1}
+            value={[conditions.rodLength ?? 1]}
+            disabled={busy || stage === "armed"}
+            onValueChange={(v) =>
+              setConditions((c) => ({ ...c, rodLength: v[0] }))
+            }
+          />
+          <div className="setting-row">
+            <label htmlFor="ballast">Nose ballast</label>
+            <strong>{conditions.ballast ?? 0} g</strong>
+          </div>
+          <Slider
+            id="ballast"
+            aria-label="Nose ballast"
+            min={0}
+            max={75}
+            step={1}
+            value={[conditions.ballast ?? 0]}
+            disabled={busy || stage === "armed"}
+            onValueChange={(v) =>
+              setConditions((c) => ({ ...c, ballast: v[0] }))
+            }
+          />
+          <p className="settings-note">
+            Estimated CG {fmt(balance.cg * 100, 1)} cm / CP{" "}
+            {fmt(balance.cp * 100, 1)} cm from the nose ·{" "}
+            {fmt(balance.margin, 2)} calibers. Adding nose weight moves CG
+            forward and increases launch mass.
+          </p>
           <div className="setting-row">
             <label htmlFor="flight-trail">Show flight trail</label>
             <Switch
@@ -848,8 +1060,9 @@ export default function RocketRange() {
             />
           </div>
           <p className="settings-note">
-            Flight runs automatically after ignition. Wind, stability, motor
-            thrust, and recovery determine its path.
+            Thrust uses sourced motor samples. Balance, aerodynamic
+            coefficients, and canopy strength remain estimates; results are not
+            certified flight predictions.
           </p>
         </DialogContent>
       </Dialog>
@@ -944,11 +1157,25 @@ export default function RocketRange() {
             official downloadable meshes were not available.
           </p>
           <p>
-            Scale rockets use virtual hobby-model dimensions, engines, and
-            parachutes. No affiliation with or endorsement by Estes, NASA, or
-            SpaceX.
+            Scale rockets use virtual hobby-model dimensions, clear stabilizing
+            fins, engines, and parachutes. No affiliation with or endorsement by
+            Estes, NASA, or SpaceX.
           </p>
           <div className="credit-links">
+            <a
+              href="https://www.thrustcurve.org/info/api.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Motor samples · ThrustCurve <ArrowUpRight size={14} />
+            </a>
+            <a
+              href="https://openrocket.info/documentation.html"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Aerodynamic references · OpenRocket <ArrowUpRight size={14} />
+            </a>
             <a
               href="https://github.com/nasa/NASA-3D-Resources"
               target="_blank"

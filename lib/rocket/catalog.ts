@@ -1,3 +1,4 @@
+import motorData from "./motor-data.json";
 export type Rocket = {
   id: string;
   name: string;
@@ -19,6 +20,10 @@ export type Rocket = {
   drag: number;
   shape?: "saturn" | "falcon" | "redstone" | "atlas" | "v2";
   source: string;
+  /** Estimated dry CG measured aft of the nose, as a fraction of length. */
+  dryCg?: number;
+  mountDiameter?: number;
+  mountLength?: number;
   model?: string;
   modelCredit?: string;
 };
@@ -290,7 +295,7 @@ export const ROCKETS: Rocket[] = [
     accent: "#15191d",
     nose: "#efeee9",
     fins: 4,
-    finSpan: 0.027,
+    finSpan: 0.045,
     finHeight: 0.09,
     noseRatio: 0.15,
     motors: ["D12-3", "E12-4"],
@@ -312,7 +317,7 @@ export const ROCKETS: Rocket[] = [
     accent: "#191c20",
     nose: "#efebe2",
     fins: 4,
-    finSpan: 0.024,
+    finSpan: 0.065,
     finHeight: 0.09,
     noseRatio: 0.18,
     motors: ["E12-4"],
@@ -356,7 +361,7 @@ export const ROCKETS: Rocket[] = [
     accent: "#11171d",
     nose: "#22272b",
     fins: 3,
-    finSpan: 0.026,
+    finSpan: 0.05,
     finHeight: 0.11,
     noseRatio: 0.22,
     motors: ["D12-3", "E12-4"],
@@ -376,54 +381,84 @@ export type Motor = {
   mass: number;
   propellant: number;
   curve: [number, number][];
+  source: string;
+  provenance: string;
 };
-function motor(
-  id: string,
-  diameter: number,
-  length: number,
-  impulse: number,
-  burn: number,
-  mass: number,
-  propellant: number,
-  peak: number,
-): Motor {
-  const delay = Number(id.split("-")[1]);
-  const curve: [number, number][] = [
-    [0, 0],
-    [0.035, peak],
-    [0.15, peak * 0.8],
-    [0.28, peak * 0.33],
-    [burn - 0.1, peak * 0.27],
-    [burn, 0],
-  ];
-  let area = 0;
-  for (let i = 1; i < curve.length; i++)
-    area +=
-      ((curve[i][0] - curve[i - 1][0]) * (curve[i][1] + curve[i - 1][1])) / 2;
+function motor(id: string): Motor {
+  const designation = id.split("-")[0] as keyof typeof motorData;
+  const data = motorData[designation];
   return {
     id,
-    diameter,
-    length,
-    impulse,
-    burn,
-    delay,
-    mass,
-    propellant,
-    curve: curve.map(([t, f]) => [t, (f * impulse) / area]),
+    diameter: data.diameter,
+    length: data.length,
+    mass: data.mass,
+    propellant: data.propellant,
+    impulse: data.impulse,
+    burn: data.burn,
+    delay: Number(id.split("-")[1]),
+    curve: data.samples.map((p) => [p[0], p[1]]),
+    source: data.source,
+    provenance:
+      data.classification === "cert"
+        ? "Certification-derived samples"
+        : "Contributed simulation samples",
   };
 }
 export const MOTORS: Motor[] = [
-  motor("A8-3", 18, 70, 2.3, 0.73, 0.0162, 0.0033, 10),
-  motor("B6-4", 18, 70, 4.9, 0.86, 0.019, 0.006, 12),
-  motor("C6-5", 18, 70, 8.8, 1.85, 0.024, 0.0108, 14),
-  motor("C6-7", 18, 70, 8.8, 1.85, 0.024, 0.0108, 14),
-  motor("C11-3", 24, 70, 8.8, 0.8, 0.033, 0.012, 22),
-  motor("D12-3", 24, 70, 16.8, 1.65, 0.043, 0.025, 30),
-  motor("D12-5", 24, 70, 16.8, 1.65, 0.043, 0.025, 30),
-  motor("D12-7", 24, 70, 16.8, 1.65, 0.043, 0.025, 30),
-  motor("E16-4", 29, 114, 33.4, 2.1, 0.085, 0.041, 38),
-  motor("F15-6", 29, 114, 49.6, 3.45, 0.102, 0.06, 40),
-  motor("E12-4", 24, 95, 27.2, 2.4, 0.059, 0.036, 32),
-  motor("E12-6", 24, 95, 27.2, 2.4, 0.059, 0.036, 32),
-];
-export const getMotor = (id: string) => MOTORS.find((m) => m.id === id)!;
+  "A8-3",
+  "B6-4",
+  "C6-5",
+  "C6-7",
+  "C11-3",
+  "D12-3",
+  "D12-5",
+  "D12-7",
+  "E16-4",
+  "F15-6",
+  "E12-4",
+  "E12-6",
+].map(motor);
+export function getMotor(id: string) {
+  const m = MOTORS.find((m) => m.id === id);
+  if (!m) throw new Error(`Unknown engine: ${id}`);
+  return m;
+}
+
+// Mount dimensions are fixed properties of each airframe, independent of selection.
+for (const rocket of ROCKETS) {
+  const mount: Record<string, [number, number]> = {
+    alpha: [18, 70],
+    bertha: [18, 70],
+    baby: [18, 70],
+    daddy: [24, 95],
+    max: [18, 70],
+    mean: [24, 95],
+    patriot: [18, 70],
+    executioner: [24, 95],
+    cherokee: [24, 95],
+    bullpup: [18, 70],
+    nova: [24, 70],
+    superbertha: [29, 114],
+    falcon: [24, 95],
+    saturn: [24, 95],
+    redstone: [24, 95],
+    atlas: [24, 95],
+  };
+  [rocket.mountDiameter, rocket.mountLength] = mount[rocket.id];
+  // Dry CG is an explicit game estimate until a measured, finished-kit CG is supplied.
+  rocket.dryCg =
+    rocket.shape === "saturn"
+      ? 0.38
+      : rocket.shape === "atlas"
+        ? 0.4
+        : rocket.shape === "falcon"
+          ? 0.46
+          : 0.47;
+}
+export function engineFits(r: Rocket, m: Motor) {
+  return (
+    r.motors.includes(m.id) &&
+    m.diameter === r.mountDiameter &&
+    m.length <= (r.mountLength ?? 0)
+  );
+}

@@ -310,7 +310,8 @@ export function buildEnvironment(scene: T.Scene) {
     root,
     sky,
     sun,
-    update: (t: number, wind: number) => {
+    update: (t: number, wind: number, direction = 270) => {
+      sock.rotation.y = ((270 - direction) * Math.PI) / 180;
       time.value = t;
       fabric.rotation.y = Math.sin(t * 0.6) * 0.07;
       fabric.rotation.z =
