@@ -1,0 +1,54 @@
+# Rocket Range — agent guide
+
+## Working agreement
+
+- Commit early and often. Create a focused Git commit whenever a meaningful, coherent slice is complete; do not leave the entire task in one final commit. This is an explicit user rule.
+- Continue improving this guide as architecture, workflows, and project decisions become established.
+- Preserve the user's changes. Inspect Git status before edits, use focused commits, and never reset unrelated work.
+- Build the actual playable 3D simulator. The launch field and rocket preparation are the primary interface, not a marketing page.
+- Ask concise clarifying questions when a decision materially changes the experience, but continue independent work while awaiting answers.
+- Do not claim an asset is an official Estes model when it is a recreation. Keep imported assets, reference-derived geometry, and original geometry clearly attributed.
+
+## Product scope
+
+A high-fidelity browser model rocket game: select a rocket, fit a compatible Estes-style motor, move to the pad, arm the controller, launch, and follow parachute recovery. Include a varied Estes fleet and miniature Falcon 9, Saturn V, Mercury-Redstone, and Mercury-Atlas. These scale tributes fly as hobby rockets; they are not orbital-launch simulations.
+
+The initial default is balanced realism and approachable mouse/keyboard controls, with a responsive layout. Simulation output is for the game, not real-world flight certification.
+
+## Architecture
+
+- `app/page.tsx`: entry point for the game.
+- `components/rocket-range.tsx`: React application, setup workflow, fleet selection, and flight UI.
+- `components/rocket/`: browser-only 3D integration.
+- `lib/rocket/catalog.ts`: rocket dimensions, visual parameters, engine compatibility, motor data, and sources.
+- `lib/rocket/physics.ts`: renderer-independent flight integration and prediction. SI units throughout.
+- `lib/rocket/models.ts`: mesh construction, imported model loading, equipment, recovery geometry, and thumbnail rendering.
+- `lib/rocket/environment.ts`: 3D field, lighting, sky, vegetation, and launch-site details.
+- `public/models/`: locally served assets. Keep source, creator, license, and modifications documented in `ASSETS.md`.
+- `tests/`: meaningful behavioral checks, especially flight/recovery invariants and workflow transitions.
+
+Use React and TypeScript with Three.js. Keep high-frequency simulation/render state outside React; publish telemetry at a limited rate. Use a fixed physics timestep so simulation speed and display refresh do not change flight results. Dispose Three.js resources and event listeners during teardown. Browser APIs must not run during server rendering.
+
+## Flight rules
+
+- Engines must be from the selected rocket's compatible list. Changing a rocket clears preparation and resets its recommended engine.
+- Require engine loading, pad placement, and controller arming before ignition.
+- Abort must work during countdown. Never allow configuration changes to mutate a flight in progress.
+- Thrust ends at burnout. Ejection delay starts at burnout, not ignition or apogee.
+- Gravity, changing propellant mass, air-relative drag, wind drift, and parachute inflation affect flight.
+- Landed altitude must be zero. Flight reports must use actual recorded telemetry.
+- Distinguish approximate motor curves and virtual scale-model parameters from verified manufacturer specifications.
+
+## Validation and development
+
+- Install using the existing lockfile; add dependencies only for required capabilities.
+- `npm run dev`: local development at the URL printed by the server.
+- `npm run build`: production build. The Sites build wrapper also validates hosting output.
+- `npx tsc --noEmit`: TypeScript validation.
+- Add targeted behavioral tests for complex simulation changes; do not write tests that merely restate UI markup.
+- When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, abort, and at least one small viewport. Check console errors and asset failures.
+- Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
+
+## Publishing
+
+This project uses Sites; preserve `.openai/hosting.json` and its existing project ID. Do not create a second Site. Follow the Sites build and hosting skills for publishing. Keep local Git history coherent and push only through the authorized credential flow. Preserve private access unless the user requests otherwise.
