@@ -55,6 +55,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - Add targeted behavioral tests for complex simulation changes; do not write tests that merely restate UI markup.
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
+- README screenshots live in `docs/screenshots/` and must show actual local gameplay. Capture in a clean browser window and inspect each image for unrelated tabs, personal information, and stale UI before committing. Keep captions and images consistent with the current game.
 
 ## Local development and source sharing
 

@@ -4,6 +4,18 @@ A 3D model rocket simulator for the browser. Choose your rocket and motor, launc
 
 Built with React, TypeScript, Three.js, and Vite. No account, API key, database, or hosted service is required. Desktop mouse and keyboard are the primary controls.
 
+![Alpha III armed on the launch pad, with engine selection and launch controls](docs/screenshots/launch-pad.jpg)
+
+## Screenshots
+
+Actual gameplay captured from the local app. Browse Estes recreations or miniature spaceflight vehicles, then watch an automatic flight and parachute recovery.
+
+| Estes recreations | Scale collection |
+| --- | --- |
+| ![Estes rocket selection with Alpha III, Big Bertha, Big Daddy, and other recreations](docs/screenshots/estes-fleet.jpg) | ![Scale rocket selection with Falcon 9, Saturn V, Mercury-Redstone, and Mercury-Atlas](docs/screenshots/scale-fleet.jpg) |
+
+![Alpha III descending under an orange and white parachute in Follow view](docs/screenshots/parachute-recovery.jpg)
+
 ## Run locally
 
 Requires **Node.js 22.13+** and npm. The repository includes `.nvmrc` for Node 22.
