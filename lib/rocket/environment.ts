@@ -17,14 +17,21 @@ export function buildEnvironment(scene: T.Scene) {
   scene.add(root);
   const rand = random();
   scene.background = new T.Color("#b4d0d9");
-  scene.fog = new T.FogExp2("#bfd1cf", 0.00135);
+  scene.fog = new T.FogExp2("#bfd1cf", 0.0006);
   const sky = new Sky();
   sky.scale.setScalar(450000);
   const u = sky.material.uniforms;
-  u.turbidity.value = 3;
+  u.turbidity.value = 2.2;
   u.rayleigh.value = 1.5;
-  u.mieCoefficient.value = 0.005;
+  u.mieCoefficient.value = 0.003;
   u.mieDirectionalG.value = 0.83;
+  // One cloud layer: small, separated patches, with blue sky through the gaps.
+  // Sky's defaults are broad enough to look like a white bank behind a tiny rocket.
+  u.cloudScale.value = 0.0012;
+  u.cloudCoverage.value = 0.24;
+  u.cloudDensity.value = 0.26;
+  u.cloudElevation.value = 0.3;
+  u.cloudSpeed.value = 0.000008;
   const sunPos = new T.Vector3(-0.5, 0.5, -0.75).normalize();
   u.sunPosition.value.copy(sunPos);
   scene.add(sky);
@@ -63,7 +70,7 @@ export function buildEnvironment(scene: T.Scene) {
       diffuseColor.rgb=mix(grass,vec3(.40,.35,.25),dust*.8);`,
     );
   };
-  const groundGeo = new T.PlaneGeometry(3600, 3600, 140, 140);
+  const groundGeo = new T.PlaneGeometry(6000, 6000, 180, 180);
   groundGeo.rotateX(-Math.PI / 2);
   const a = groundGeo.attributes.position;
   for (let i = 0; i < a.count; i++) {
@@ -283,29 +290,6 @@ export function buildEnvironment(scene: T.Scene) {
     materials.black,
     root,
   );
-  // Soft, layered cloud sheets at a true sky distance.
-  const cloudMat = new T.ShaderMaterial({
-    transparent: true,
-    depthWrite: false,
-    side: T.DoubleSide,
-    uniforms: { uTime: time },
-    vertexShader:
-      "varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}",
-    fragmentShader: `varying vec2 vUv;uniform float uTime;${noiseGLSL}void main(){vec2 p=vUv*8.+vec2(uTime*.003,0.);float n=noise(p)*.5+noise(p*2.)*.3+noise(p*4.)*.2;float edge=smoothstep(0.,.18,vUv.x)*smoothstep(0.,.18,1.-vUv.x)*smoothstep(0.,.18,vUv.y)*smoothstep(0.,.18,1.-vUv.y);float a=smoothstep(.42,.7,n)*edge*.58;gl_FragColor=vec4(mix(vec3(.83,.86,.84),vec3(1.),n),a);}`,
-  });
-  for (let i = 0; i < 5; i++) {
-    const c = mesh(
-      new T.PlaneGeometry(1900, 900),
-      cloudMat,
-      root,
-      (i - 2) * 850,
-      500 + i * 30,
-      -1400 - i * 180,
-    );
-    c.rotation.x = -0.35;
-    c.castShadow = false;
-    c.receiveShadow = false;
-  }
   return {
     root,
     sky,
@@ -313,6 +297,7 @@ export function buildEnvironment(scene: T.Scene) {
     update: (t: number, wind: number, direction = 270) => {
       sock.rotation.y = ((270 - direction) * Math.PI) / 180;
       time.value = t;
+      u.time.value = t;
       fabric.rotation.y = Math.sin(t * 0.6) * 0.07;
       fabric.rotation.z =
         -Math.PI / 2 + 0.15 + Math.sin(t * 2) * 0.025 * Math.max(0.2, wind);

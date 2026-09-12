@@ -69,14 +69,14 @@ export default function Field(props: FieldProps) {
     el.appendChild(renderer.domElement);
     const scene = new T.Scene();
     const environment = buildEnvironment(scene);
-    const camera = new T.PerspectiveCamera(44, 1, 0.01, 12000);
+    const camera = new T.PerspectiveCamera(44, 1, 0.01, 18000);
     camera.position.set(2.1, 1.25, 3.3);
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.07;
     controls.target.set(0.45, 0.6, 0);
     controls.minDistance = 0.45;
-    controls.maxDistance = 1200;
+    controls.maxDistance = 1800;
     controls.maxPolarAngle = Math.PI * 0.49;
     controls.enablePan = false;
     const rocketRoot = new T.Group();
