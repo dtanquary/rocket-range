@@ -49,3 +49,14 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, abort, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
 
+## Established implementation details
+
+- `components/rocket/field.tsx` owns the Three.js lifecycle, fixed-step simulation accumulator, camera updates, smoke particle pool, trajectory buffer, and telemetry delivery. React receives updates at roughly 13 Hz.
+- `npm test` runs Node's test runner through `tsx`; it covers all offered rocket/motor combinations in calm and maximum wind, impulse integration, ejection timing, descent speed, wind drift, and reset behavior.
+- `npm run typecheck` runs TypeScript without emitting application files.
+- NASA Mercury assets contain capsules, not full vehicles. Preserve the original booster/escape-tower assembly around them. The complete Saturn V and Falcon assets use the imported-mesh recovery split.
+- Original imported material and geometry resources can be shared by clones. Do not dispose a shared resource while another visible model still uses it. Include retired scene objects in teardown.
+- Keep canopy materials consolidated into two geometry groups, grass instanced, smoke pooled, and telemetry throttled to avoid avoidable draw calls or React work.
+- `public/models/ATTRIBUTION.md` records the full asset audit. Falcon mesh derivatives remain CC BY-SA 4.0 and must keep an accessible attribution/license link.
+- No database, authentication customization, or external APIs are required for the game. Do not add them without a product requirement.
+- Browser visual/interaction QA was unavailable in the initial environment because no browser was connected. Do not describe source checks or numerical tests as a successful browser playthrough.

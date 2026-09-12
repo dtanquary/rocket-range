@@ -3,7 +3,8 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Rocket Range — A model rocket flight simulator",
-  description: "Choose a model rocket, load an Estes-style engine, and launch into a living 3D field. Follow every flight from ignition to parachute recovery.",
+  description:
+    "Choose a model rocket, load an Estes-style engine, and launch into a living 3D field. Follow every flight from ignition to parachute recovery.",
   other: {
     "codex-preview": "development",
   },

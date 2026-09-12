@@ -1,2 +1,4 @@
 import RocketRange from "@/components/rocket-range";
-export default function Home() { return <RocketRange />; }
+export default function Home() {
+  return <RocketRange />;
+}
