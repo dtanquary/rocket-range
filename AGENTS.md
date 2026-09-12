@@ -50,9 +50,11 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
 
-## Publishing
+## Local development and publishing
 
-This project uses Sites; preserve `.openai/hosting.json` and its existing project ID. Do not create a second Site. Follow the Sites build and hosting skills for publishing. Keep local Git history coherent and push only through the authorized credential flow. Preserve private access unless the user requests otherwise.
+The user explicitly requests local-only development for now. Run the app locally and keep the development server available for them. Do not upload source, save hosted versions, or deploy unless the user asks to publish. Continue making focused local Git commits.
+
+Preserve the existing `.openai/hosting.json` project ID for any future authorized publishing; do not create a second Site. If the user later requests publication, follow the Sites build and hosting skills and preserve private access unless they request otherwise.
 
 ## Established implementation details
 
