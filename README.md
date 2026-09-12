@@ -1,22 +1,31 @@
 # Rocket Range
 
-A browser 3D model rocket field built with React, TypeScript, and Three.js. Prepare an Estes-style motor, place a rocket on the launch pad, insert the controller key, and follow the flight through burnout and parachute recovery.
+A 3D model rocket simulator for the browser. Choose your rocket and motor, launch into a procedural field, and watch physics-driven flight and parachute recovery.
+
+Built with React, TypeScript, Three.js, and Vite. No account, API key, database, or hosted service is required. Desktop mouse and keyboard are the primary controls.
 
 ## Run locally
 
+Requires **Node.js 22.13+** and npm. The repository includes `.nvmrc` for Node 22.
+
 ```sh
+git clone https://github.com/dtanquary/rocket-range.git
+cd rocket-range
 npm ci
 npm run dev
 ```
 
 Open the URL printed by the development server (normally http://localhost:5173).
 
-Development is local-only for now. Do not push or deploy to hosting unless explicitly requested.
+The development server binds to the local machine. If port 5173 is busy, use `npm run dev -- --port 5174`.
+
+`npm run build` creates a standalone static site in `dist/`; `npm run preview` serves the build locally at the printed address (normally port 4173).
 
 ```sh
 npm test
 npm run typecheck
 npm run build
+npm run check:privacy
 ```
 
 ## The fleet
@@ -57,4 +66,8 @@ This is a realism-oriented approximation, not an engineering validation tool. CG
 
 Read [AGENTS.md](AGENTS.md) before editing. Commit early and often, keep asset provenance explicit, and extend targeted physics tests when changing flight behavior.
 
-The checked-in Sites project configuration is retained for potential future publishing. Local development does not require a deployment.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for development and pull request guidance and [SECURITY.md](SECURITY.md) for private reporting. Run the documented checks locally before pushing changes.
+
+## License and credits
+
+A license for the original project code has not been selected yet. Third-party assets retain their own terms: the adapted Falcon 9 mesh is CC BY-SA 4.0, NASA assets follow the linked NASA usage terms, and the vendored UI components retain their MIT notices. See [ASSETS.md](ASSETS.md), [model attribution](public/models/ATTRIBUTION.md), and [UI license](components/ui/LICENSE.md). This project is not affiliated with or endorsed by Estes, NASA, or SpaceX.
