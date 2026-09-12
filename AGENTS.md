@@ -13,7 +13,7 @@
 
 A high-fidelity browser model rocket game: select a rocket, fit a compatible Estes-style motor, move to the pad, arm the controller, launch, and follow parachute recovery. Include a varied Estes fleet and miniature Falcon 9, Saturn V, Mercury-Redstone, and Mercury-Atlas. These scale tributes fly as hobby rockets; they are not orbital-launch simulations.
 
-The initial default is balanced realism and approachable mouse/keyboard controls, with a responsive layout. Simulation output is for the game, not real-world flight certification.
+The user explicitly prioritizes realism: engine compatibility, wind, stability, and recovery physics. Desktop browsers with mouse and keyboard are the primary target; preserve the responsive fallback without letting mobile constraints limit desktop controls. Simulation output remains an approximation, not real-world flight certification.
 
 ## Architecture
 
