@@ -50,6 +50,10 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
 
+## Local development and publishing
+
+The user explicitly requests local-only development for now. Run the app locally and keep the development server available for them. Do not upload source, save hosted versions, or deploy unless the user asks to publish. Continue making focused local Git commits.
+
 ## Established implementation details
 
 - `components/rocket/field.tsx` owns the Three.js lifecycle, fixed-step simulation accumulator, camera updates, smoke particle pool, trajectory buffer, and telemetry delivery. React receives updates at roughly 13 Hz.

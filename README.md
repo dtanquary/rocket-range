@@ -11,6 +11,8 @@ npm run dev
 
 Open the URL printed by the development server (normally http://localhost:5173).
 
+Development is local-only for now. Do not push or deploy to hosting unless explicitly requested.
+
 ```sh
 npm test
 npm run typecheck
@@ -51,4 +53,4 @@ This is a realism-oriented approximation, not an engineering validation tool. CG
 
 Read [AGENTS.md](AGENTS.md) before editing. Commit early and often, keep asset provenance explicit, and extend targeted physics tests when changing flight behavior.
 
-The checked-in Sites project configuration identifies the private hosted app. Do not create another Site for this checkout.
+The checked-in Sites project configuration is retained for potential future publishing. Local development does not require a deployment.
