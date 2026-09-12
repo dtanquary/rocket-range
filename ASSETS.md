@@ -12,7 +12,7 @@ The following files come from [NASA 3D Resources](https://github.com/nasa/NASA-3
 
 ## Original parametric assets
 
-The Mercury boosters and escape towers, Estes rocket recreations, the launch pad, launch controller, parachutes, and field geometry are original procedural meshes. Rocket dimensions and compatible engine selections are based on the manufacturer pages linked in `lib/rocket/catalog.ts`. They are not official downloadable Estes meshes. Source research and further imported asset attribution will be added here as assets are integrated.
+The Mercury boosters and escape towers, Estes rocket recreations, the launch pad, launch controller, parachutes, and field geometry are original procedural meshes. Rocket dimensions and compatible engine selections are based on the manufacturer pages linked in `lib/rocket/catalog.ts`. They are not official downloadable Estes meshes. Imported asset attribution and conversion details are maintained below and in `public/models/ATTRIBUTION.md`.
 
 Motor curves use sourced numerical thrust samples from ThrustCurve, with source URLs and provenance in `lib/rocket/motor-data.json`. Scale-fleet sizes, masses, motor mounts, and recovery equipment remain game parameters. This is not an engineering flight predictor.
 

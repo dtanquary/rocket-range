@@ -17,7 +17,8 @@ The user explicitly prioritizes realism: engine compatibility, wind, stability, 
 
 ## Architecture
 
-- `app/page.tsx`: entry point for the game.
+- `src/main.tsx` and `index.html`: Vite/React entry points.
+- `src/styles.css`: application styling and theme tokens.
 - `components/rocket-range.tsx`: React application, setup workflow, fleet selection, and flight UI.
 - `components/rocket/`: browser-only 3D integration.
 - `lib/rocket/catalog.ts`: rocket dimensions, visual parameters, engine compatibility, and estimated dry CG.
@@ -30,7 +31,7 @@ The user explicitly prioritizes realism: engine compatibility, wind, stability, 
 - `public/models/`: locally served assets. Keep source, creator, license, and modifications documented in `ASSETS.md`.
 - `tests/`: meaningful behavioral checks, especially flight/recovery invariants and workflow transitions.
 
-Use React and TypeScript with Three.js. Keep high-frequency simulation/render state outside React; publish telemetry at a limited rate. Use a fixed physics timestep so simulation speed and display refresh do not change flight results. Dispose Three.js resources and event listeners during teardown. Browser APIs must not run during server rendering.
+Use React and TypeScript with Three.js. Keep high-frequency simulation/render state outside React; publish telemetry at a limited rate. Use a fixed physics timestep so simulation speed and display refresh do not change flight results. Dispose Three.js resources and event listeners during teardown. Create browser resources inside effects or user gestures, and clean them up during React Strict Mode remounts.
 
 ## Flight rules
 
@@ -47,7 +48,8 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 
 - Install using the existing lockfile; add dependencies only for required capabilities.
 - `npm run dev`: local development at the URL printed by the server.
-- `npm run build`: production build. The Sites build wrapper also validates hosting output.
+- `npm run build`: static production build in `dist/`.
+- `npm run check:privacy`: inspect working files, all reachable history, and contributor email metadata before pushing.
 - `npx tsc --noEmit`: TypeScript validation.
 - Add targeted behavioral tests for complex simulation changes; do not write tests that merely restate UI markup.
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
@@ -55,9 +57,9 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 
 ## Local development and publishing
 
-The user explicitly requests local-only development for now. Run the app locally and keep the development server available for them. Do not upload source, save hosted versions, or deploy unless the user asks to publish. Continue making focused local Git commits.
+Run the app locally during development. The source repository is prepared for public GitHub sharing; pushing source does not authorize deploying the app to a hosting service. Continue making focused Git commits.
 
-Preserve the existing `.openai/hosting.json` project ID for any future authorized publishing; do not create a second Site. If the user later requests publication, follow the Sites build and hosting skills and preserve private access unless they request otherwise.
+This is a standalone Vite/React application with no account, secret, or hosting-platform requirement. Never commit private deployment metadata, credentials, local account paths, or personal email addresses. Use a GitHub noreply identity for contributions. Run the privacy check and Gitleaks before publishing, including after any history rewrite.
 
 ## Established implementation details
 
@@ -71,7 +73,7 @@ Preserve the existing `.openai/hosting.json` project ID for any future authorize
 - Engine audio should be a small, dry hiss/crackle, without cinematic bass or reverberation. Mute must affect an active motor immediately, and dispose audio resources on teardown.
 - `public/models/ATTRIBUTION.md` records the full asset audit. Falcon mesh derivatives remain CC BY-SA 4.0 and must keep an accessible attribution/license link.
 - No database, authentication customization, or external APIs are required for the game. Do not add them without a product requirement.
-- Browser visual/interaction QA was unavailable in the initial environment because no browser was connected. Do not describe source checks or numerical tests as a successful browser playthrough.
+- Do not describe source checks or numerical tests as a successful browser playthrough; report exactly which validation was performed.
 
 ## Autonomous flight — explicit user requirement
 
