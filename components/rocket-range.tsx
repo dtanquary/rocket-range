@@ -46,6 +46,7 @@ import {
 } from "@/lib/rocket/catalog";
 import {
   newFlight,
+  flightConfiguration,
   predict,
   stabilityOf,
   type Conditions,
@@ -56,6 +57,7 @@ const STAGE_LABELS: Record<Stage, string> = {
   engine: "ENGINE LOADED",
   pad: "ON THE PAD",
   armed: "READY FOR LAUNCH",
+  igniting: "IGNITER ENERGIZED",
   flight: "FLIGHT IN PROGRESS",
   landed: "RECOVERY COMPLETE",
 };
@@ -67,6 +69,10 @@ function fmt(n: number, digits = 0) {
 }
 export default function RocketRange() {
   const [audio] = useState(() => new RangeAudio());
+  const ignitionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [launchConfig, setLaunchConfig] = useState<ReturnType<
+    typeof flightConfiguration
+  > | null>(null);
   const [rocketId, setRocketId] = useState("alpha"),
     [motorId, setMotorId] = useState("B6-4"),
     [stage, setStage] = useState<Stage>("rocket"),
@@ -97,7 +103,13 @@ export default function RocketRange() {
   useEffect(() => {
     audio.setMuted(!sound);
   }, [audio, sound]);
-  useEffect(() => () => audio.dispose(), [audio]);
+  useEffect(
+    () => () => {
+      if (ignitionTimer.current !== null) clearTimeout(ignitionTimer.current);
+      audio.dispose();
+    },
+    [audio],
+  );
   const rocket = ROCKETS.find((r) => r.id === rocketId)!,
     motor = getMotor(motorId);
   const prediction = useMemo(
@@ -116,33 +128,54 @@ export default function RocketRange() {
         : telemetry.outcome === "no-recovery"
           ? "Impact before ejection."
           : "A hard landing.";
-  const busy = stage === "flight",
+  const busy = stage === "flight" || stage === "igniting",
     loaded = stage !== "rocket",
     mounted = !["rocket", "engine"].includes(stage),
     armed = stage === "armed";
-  const current = useRef({ stage, sound, motor });
-  current.current = { stage, sound, motor };
+  const current = useRef({ stage, sound, motor, rocket, conditions });
+  current.current = { stage, sound, motor, rocket, conditions };
   const chooseRocket = (r: Rocket) => {
     if (busy) return;
     setRocketId(r.id);
     setMotorId(r.recommended);
     setConditions((c) => ({ ...c, ballast: 0 }));
     setStage("rocket");
+    setLaunchConfig(null);
     setTelemetry(newFlight());
     setCamera("orbit");
     setFleetOpen(false);
   };
   const reset = () => {
     setStage("rocket");
+    setLaunchConfig(null);
     setTelemetry(newFlight());
     setCamera("orbit");
     setFlightNumber((n) => n + 1);
   };
   const launch = useCallback(() => {
     if (current.current.stage !== "armed") return;
+    const config = flightConfiguration(
+      current.current.rocket,
+      current.current.motor,
+      current.current.conditions,
+    );
+    // Latch immediately, including before React renders, so repeated Space/clicks
+    // cannot schedule a second ignition or change the already committed setup.
+    current.current.stage = "igniting";
+    setLaunchConfig(config);
+    setStage("igniting");
     audio.setMuted(!current.current.sound);
-    audio.ignite(current.current.motor);
-    setStage("flight");
+    audio.unlock();
+    ignitionTimer.current = setTimeout(
+      () => {
+        ignitionTimer.current = null;
+        if (current.current.stage !== "igniting") return;
+        audio.ignite(config.motor);
+        current.current.stage = "flight";
+        setStage("flight");
+      },
+      250 + Math.random() * 750,
+    );
   }, [audio]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
@@ -200,6 +233,7 @@ export default function RocketRange() {
       <div className="world">
         <Field
           audio={audio}
+          launchConfig={launchConfig}
           rocket={rocket}
           motor={motor}
           conditions={conditions}
@@ -672,19 +706,29 @@ export default function RocketRange() {
               <RotateCcw size={17} /> Prepare another flight
             </button>
           </>
-        ) : stage === "flight" ? (
+        ) : busy ? (
           <>
             <div className="flight-observation">
               <Radio size={17} />
-              <strong>Flight in progress</strong>
-              <span>OBSERVATION ONLY</span>
+              <strong>
+                {stage === "igniting"
+                  ? "Igniter energized"
+                  : "Flight in progress"}
+              </strong>
+              <span>
+                {stage === "igniting"
+                  ? "AWAITING IGNITION"
+                  : "OBSERVATION ONLY"}
+              </span>
             </div>
             <div className="controller-foot">
-              {telemetry.phase === "recovery"
-                ? telemetry.chuteFailed
-                  ? "Canopy overloaded · tracking descent"
-                  : "Parachute open · recovery in progress"
-                : "Tracking vehicle · radio link active"}
+              {stage === "igniting"
+                ? "Current applied · waiting for the motor"
+                : telemetry.phase === "recovery"
+                  ? telemetry.chuteFailed
+                    ? "Canopy overloaded · tracking descent"
+                    : "Parachute open · recovery in progress"
+                  : "Tracking vehicle · radio link active"}
             </div>
           </>
         ) : (

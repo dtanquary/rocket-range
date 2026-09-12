@@ -1,6 +1,6 @@
 # Flight model and evidence
 
-The user prioritizes realism and desktop mouse/keyboard interaction. Preparation is interactive; after the launch button ignites the engine, the flight is automatic. The simulation takes a deep, frozen copy of the airframe, engine, and field configuration. Camera/sound/display state is never supplied to the integrator. There is no throttle, steering, pause, speed multiplier, or mid-flight reset.
+The user prioritizes realism and desktop mouse/keyboard interaction. Preparation is interactive; pressing Launch takes a deep, frozen copy of the airframe, engine, and field configuration and locks the setup. A uniformly sampled 0.25–1 second igniter delay follows, then motor audio and automatic flight start. The physical flight clock starts at ignition, not the button press. Camera/sound/display state is never supplied to the integrator. There is no throttle, steering, pause, speed multiplier, or mid-flight reset.
 
 ## What is modeled
 
@@ -41,3 +41,5 @@ Impulse is the area under the selected sampled curve. It is not rescaled to fill
 ## Verification
 
 `npm test` verifies all catalog pairs, rod constraints and exit speed, mass/CG movement, restoring versus destabilizing torque, wind direction symmetry, repeatable gusts, early/late ejection consequences, immutable launch inputs, and finite results at selectable environment/ballast limits. Source/TypeScript/build checks supplement these numerical tests. Browser rendering and playthrough validation still require a connected browser.
+
+Audio checks verify finite/unclipped motor signals, burnout duration, thrust-envelope response, and reduced low-frequency energy. Camera checks verify steady Follow orientation under changing descent velocity, recovery framing for the fleet, and Onboard transforms under translation and rotation. These checks do not substitute for listening or visual browser review. Spatial audio uses Web Audio's [PannerNode](https://developer.mozilla.org/en-US/docs/Web/API/PannerNode) and [AudioListener](https://developer.mozilla.org/en-US/docs/Web/API/AudioListener); distance attenuation and filtering are presentation choices, not a sound-pressure prediction.

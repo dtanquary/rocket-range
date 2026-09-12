@@ -144,6 +144,11 @@ export class RangeAudio {
     );
   }
 
+  /** Unlock during a user gesture so a delayed igniter can start audio later. */
+  unlock() {
+    this.activate();
+  }
+
   beep(frequency = 660, duration = 0.09, volume = 0.06) {
     if (this.muted) return;
     const ctx = this.activate();
