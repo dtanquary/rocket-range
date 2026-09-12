@@ -28,7 +28,6 @@ export type FieldProps = {
   conditions: Conditions;
   stage: Stage;
   camera: CameraMode;
-  timeScale: number;
   trail: boolean;
   onTelemetry: (s: FlightState) => void;
   onLand: () => void;
@@ -324,7 +323,7 @@ export default function Field(props: FieldProps) {
         lastStage = p.stage;
       }
       if (p.stage === "flight") {
-        accumulator += dt * p.timeScale;
+        accumulator += dt;
         while (accumulator >= 1 / 120 && flight.phase !== "landed") {
           flight = stepFlight(flight, p.rocket, p.motor, p.conditions, 1 / 120);
           accumulator -= 1 / 120;

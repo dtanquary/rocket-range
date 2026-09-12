@@ -60,3 +60,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - `public/models/ATTRIBUTION.md` records the full asset audit. Falcon mesh derivatives remain CC BY-SA 4.0 and must keep an accessible attribution/license link.
 - No database, authentication customization, or external APIs are required for the game. Do not add them without a product requirement.
 - Browser visual/interaction QA was unavailable in the initial environment because no browser was connected. Do not describe source checks or numerical tests as a successful browser playthrough.
+
+## Autonomous flight — explicit user requirement
+
+All flight decisions happen during preparation. After ignition, users observe the rocket; do not add steering, throttle, pause, time scaling, mid-flight reset, or changes to engine, ballast, wind, or recovery. Camera, sound, and display controls may change presentation only. Freeze the launch configuration at ignition so presentation changes cannot affect physics. Countdown abort is allowed before ignition. Desktop mouse and keyboard are the primary interface. The user has no additional must-have models or field requirements.
