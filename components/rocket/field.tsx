@@ -22,8 +22,7 @@ import {
   type FlightState,
   type Conditions,
 } from "@/lib/rocket/physics";
-export type Stage =
-  "rocket" | "engine" | "pad" | "armed" | "countdown" | "flight" | "landed";
+export type Stage = "rocket" | "engine" | "pad" | "armed" | "flight" | "landed";
 export type CameraMode = "orbit" | "follow" | "ground" | "onboard";
 export type FieldProps = {
   rocket: Rocket;

@@ -30,18 +30,22 @@ NASA supplies the complete Saturn V and the Mercury capsules. The Falcon mesh is
 1. Browse the fleet and select a rocket.
 2. Select and load a compatible engine. The estimate updates with the engine and field conditions.
 3. Place the rocket on the pad and insert the safety key.
-4. Launch with the button or Space. Escape aborts the countdown.
+4. Press Launch or Space to ignite the motor. After ignition, the flight is automatic.
 5. Use Orbit, Follow, Ground, or Onboard views. C cycles cameras. Drag and scroll in Orbit.
-6. During flight, Space pauses; the 1×, 3×, and 8× controls change simulation speed.
+6. During flight, watch the result. Camera, sound, and trajectory display controls affect presentation only; there are no flight inputs, pause, or speed controls.
 7. After touchdown, prepare another flight. Unload a prepared rocket to change its engine.
 
 Wind and launch rod tilt are adjustable before arming. Sound and trajectory display can be toggled at any time. Smaller screens place the preparation bench below the field.
 
 ## Simulation model
 
-Fixed 120 Hz integration in SI units with variable propellant mass, approximate impulse-normalized thrust curves, altitude-dependent air density, air-relative drag, gravity, a limited weathercock response, timed ejection after burnout, canopy inflation, and wind drift. Display refresh and simulation speed do not change the physics timestep. The game reports measured altitude, velocity, flight time, peak altitude, and downrange distance.
+Fixed 120 Hz integration in SI units. Flight uses sourced thrust samples, impulse-dependent propellant depletion, density-dependent drag, a height-dependent wind profile with repeatable gusts, launch rod constraints, estimated CP/CG stability, passive pitch/yaw response, ejection after burnout, canopy inflation, and estimated opening-load limits. Late ejection, unstable airframes, and overloaded parachutes can produce unsuccessful recoveries. The simulation records rod-exit speed, deployment airspeed, opening force, and impact speed as well as altitude and drift.
 
-This is an approachable game model, not OpenRocket, a six-degree-of-freedom flight solver, or real-world launch guidance. Motor curves and drag coefficients are approximate. Scale vehicle mass and recovery systems are virtual model parameters. Ground outside the playable field and field props are visual scenery, not collision obstacles.
+The launch button ignites immediately and captures an immutable configuration. Physics advances using elapsed time and a fixed timestep; changing cameras cannot change the trajectory. Desktop mouse/keyboard are the primary controls. Before arming, configure wind speed/direction, gust amplitude, rod length/tilt/bearing, and nose ballast.
+
+Motor samples come from [ThrustCurve](https://www.thrustcurve.org/info/api.html), including certification-derived and contributed data. The per-motor provenance is recorded in `lib/rocket/motor-data.json` and linked in the flight bench. Thrust impulse is integrated from the supplied curve, not normalized to the advertised impulse class. Nominal delay seconds are used; batch-to-batch motor variation is not simulated.
+
+This is a realism-oriented approximation, not an engineering validation tool. CG, drag, inertia, damping, fin effects, and canopy strength are estimated. The nose-and-fin CP model uses a small-angle Barrowman approximation without full body transitions or canard interactions; pitch/yaw are modeled but roll is omitted. Scale rockets use virtual mounts and clear stabilizing fins where needed. Ground scenery has no collision model. See [SIMULATION.md](SIMULATION.md) for the assumptions and references.
 
 ## Project guide
 
