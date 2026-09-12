@@ -194,7 +194,6 @@ export default function RocketRange() {
     if (current.current.stage !== "armed") return;
     if (current.current.sound) roar(current.current.motor.burn);
     setStage("flight");
-    setCamera("follow");
   }, []);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
