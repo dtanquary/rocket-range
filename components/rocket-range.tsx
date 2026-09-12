@@ -132,8 +132,6 @@ export default function RocketRange() {
     [error, setError] = useState(""),
     [telemetry, setTelemetry] = useState<FlightState>(newFlight),
     [countdown, setCountdown] = useState(3),
-    [timeScale, setTimeScale] = useState(1),
-    [paused, setPaused] = useState(false),
     [sound, setSound] = useState(true),
     [trail, setTrail] = useState(true),
     [flightNumber, setFlightNumber] = useState(1);
@@ -143,11 +141,11 @@ export default function RocketRange() {
   useEffect(() => {
     if (masterGain && audioCtx)
       masterGain.gain.setTargetAtTime(
-        sound && !paused ? 1 : 0,
+        sound ? 1 : 0,
         audioCtx.currentTime,
         0.03,
       );
-  }, [sound, paused]);
+  }, [sound]);
   const rocket = ROCKETS.find((r) => r.id === rocketId)!,
     motor = getMotor(motorId);
   const prediction = useMemo(
@@ -168,14 +166,11 @@ export default function RocketRange() {
     setTelemetry(newFlight());
     setCamera("orbit");
     setFleetOpen(false);
-    setPaused(false);
   };
   const reset = () => {
     setStage("rocket");
     setTelemetry(newFlight());
     setCamera("orbit");
-    setPaused(false);
-    setTimeScale(1);
     setFlightNumber((n) => n + 1);
   };
   const launch = useCallback(() => {
@@ -194,7 +189,6 @@ export default function RocketRange() {
       if (countdown <= 0) {
         setStage("flight");
         setCamera("follow");
-        setPaused(false);
         if (sound) roar(motor.burn);
       } else if (sound) beep(540, 0.14);
     }
@@ -209,7 +203,6 @@ export default function RocketRange() {
       if (e.code === "Space") {
         e.preventDefault();
         if (current.current.stage === "armed") launch();
-        else if (current.current.stage === "flight") setPaused((p) => !p);
       }
       if (e.key.toLowerCase() === "c")
         setCamera((c) =>
@@ -233,7 +226,6 @@ export default function RocketRange() {
   );
   const onLand = useCallback(() => {
     setStage("landed");
-    setPaused(false);
   }, []);
   const flightStatus =
     stage === "flight"
@@ -253,7 +245,6 @@ export default function RocketRange() {
           conditions={conditions}
           stage={stage}
           camera={camera}
-          timeScale={paused ? 0 : timeScale}
           trail={trail}
           onTelemetry={setTelemetry}
           onLand={onLand}
@@ -644,23 +635,10 @@ export default function RocketRange() {
           </>
         ) : stage === "flight" ? (
           <>
-            <div className="flight-speed">
-              <button
-                onClick={() => setPaused(!paused)}
-                aria-label={paused ? "Resume flight" : "Pause flight"}
-              >
-                {paused ? <Play size={17} /> : <Pause size={17} />}
-              </button>
-              <span>{paused ? "Paused" : "Simulation speed"}</span>
-              {[1, 3, 8].map((v) => (
-                <button
-                  key={v}
-                  className={timeScale === v ? "active" : ""}
-                  onClick={() => setTimeScale(v)}
-                >
-                  {v}×
-                </button>
-              ))}
+            <div className="flight-observation">
+              <Radio size={17} />
+              <strong>Flight in progress</strong>
+              <span>OBSERVATION ONLY</span>
             </div>
             <div className="controller-foot">
               {telemetry.phase === "recovery"
@@ -870,8 +848,8 @@ export default function RocketRange() {
             />
           </div>
           <p className="settings-note">
-            A balanced game simulation with approximate engine curves, wind
-            drift, timed ejection, and parachute drag.
+            Flight runs automatically after ignition. Wind, stability, motor
+            thrust, and recovery determine its path.
           </p>
         </DialogContent>
       </Dialog>
@@ -928,7 +906,7 @@ export default function RocketRange() {
               <kbd>C</kbd> Change camera
             </span>
             <span>
-              <kbd>SPACE</kbd> Launch / pause
+              <kbd>SPACE</kbd> Launch
             </span>
             <span>
               <kbd>ESC</kbd> Abort countdown
