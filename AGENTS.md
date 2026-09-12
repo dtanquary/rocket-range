@@ -56,9 +56,9 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
 
-## Local development and publishing
+## Local development and source sharing
 
-Run the app locally during development. The source repository is prepared for public GitHub sharing; pushing source does not authorize deploying the app to a hosting service. Continue making focused Git commits.
+Run the app locally. GitHub is for source sharing only. Do not add hosting integrations, deployment configuration, GitHub Actions, Dependabot, or other repository automation unless the user explicitly requests it. Continue making focused Git commits.
 
 This is a standalone Vite/React application with no account, secret, or hosting-platform requirement. Never commit private deployment metadata, credentials, local account paths, or personal email addresses. Use a GitHub noreply identity for contributions. Run the privacy check and Gitleaks before publishing, including after any history rewrite.
 
