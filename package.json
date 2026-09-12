@@ -41,5 +41,5 @@
   },
   "type": "module",
   "description": "A 3D model rocket simulator for the browser. Choose your rocket and motor, launch into a procedural field, and watch physics-driven flight and parachute recovery.",
-  "license": "UNLICENSED"
+  "license": "MIT"
 }

@@ -8,6 +8,7 @@
 - Build the actual playable 3D simulator. The launch field and rocket preparation are the primary interface, not a marketing page.
 - Ask concise clarifying questions when a decision materially changes the experience, but continue independent work while awaiting answers.
 - Do not claim an asset is an official Estes model when it is a recreation. Keep imported assets, reference-derived geometry, and original geometry clearly attributed.
+- Original project code uses the MIT License. Preserve third-party notices and the adapted Falcon mesh's CC BY-SA 4.0 terms; the code license does not supersede asset licenses.
 
 ## Product scope
 

@@ -70,4 +70,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for development and pull request guidance
 
 ## License and credits
 
-A license for the original project code has not been selected yet. Third-party assets retain their own terms: the adapted Falcon 9 mesh is CC BY-SA 4.0, NASA assets follow the linked NASA usage terms, and the vendored UI components retain their MIT notices. See [ASSETS.md](ASSETS.md), [model attribution](public/models/ATTRIBUTION.md), and [UI license](components/ui/LICENSE.md). This project is not affiliated with or endorsed by Estes, NASA, or SpaceX.
+Original project code is licensed under the [MIT License](LICENSE). Third-party assets retain their own terms: the adapted Falcon 9 mesh is CC BY-SA 4.0, NASA assets follow the linked NASA usage terms, and the vendored UI components retain their MIT notices. See [ASSETS.md](ASSETS.md), [model attribution](public/models/ATTRIBUTION.md), and [UI license](components/ui/LICENSE.md). This project is not affiliated with or endorsed by Estes, NASA, or SpaceX.
