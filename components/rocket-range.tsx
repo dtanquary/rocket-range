@@ -4,7 +4,6 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpRight,
-  AudioLines,
   Check,
   ChevronDown,
   ChevronRight,
@@ -14,13 +13,10 @@ import {
   Flag,
   Gauge,
   KeyRound,
-  Maximize,
   Mouse,
   MoveUpRight,
   Orbit,
   PackageOpen,
-  Pause,
-  Play,
   Radio,
   RotateCcw,
   Rocket as RocketIcon,
@@ -59,7 +55,6 @@ const STAGE_LABELS: Record<Stage, string> = {
   engine: "ENGINE LOADED",
   pad: "ON THE PAD",
   armed: "READY FOR LAUNCH",
-  countdown: "COUNTDOWN",
   flight: "FLIGHT IN PROGRESS",
   landed: "RECOVERY COMPLETE",
 };
@@ -141,7 +136,6 @@ export default function RocketRange() {
     [ready, setReady] = useState(false),
     [error, setError] = useState(""),
     [telemetry, setTelemetry] = useState<FlightState>(newFlight),
-    [countdown, setCountdown] = useState(3),
     [sound, setSound] = useState(true),
     [trail, setTrail] = useState(true),
     [flightNumber, setFlightNumber] = useState(1);
@@ -174,10 +168,10 @@ export default function RocketRange() {
         : telemetry.outcome === "no-recovery"
           ? "Impact before ejection."
           : "A hard landing.";
-  const busy = stage === "flight" || stage === "countdown",
+  const busy = stage === "flight",
     loaded = stage !== "rocket",
     mounted = !["rocket", "engine"].includes(stage),
-    armed = stage === "armed" || stage === "countdown";
+    armed = stage === "armed";
   const current = useRef({ stage, sound, motor });
   current.current = { stage, sound, motor };
   const chooseRocket = (r: Rocket) => {
@@ -198,24 +192,10 @@ export default function RocketRange() {
   };
   const launch = useCallback(() => {
     if (current.current.stage !== "armed") return;
-    if (current.current.sound) beep(540, 0.15);
-    setCountdown(3);
-    setStage("countdown");
+    if (current.current.sound) roar(current.current.motor.burn);
+    setStage("flight");
+    setCamera("follow");
   }, []);
-  useEffect(() => {
-    if (stage !== "countdown") return;
-    const timer = setInterval(() => setCountdown((n) => n - 1), 1000);
-    return () => clearInterval(timer);
-  }, [stage]);
-  useEffect(() => {
-    if (stage === "countdown") {
-      if (countdown <= 0) {
-        setStage("flight");
-        setCamera("follow");
-        if (sound) roar(motor.burn);
-      } else if (sound) beep(540, 0.14);
-    }
-  }, [countdown, stage, sound, motor.burn]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (
@@ -237,8 +217,6 @@ export default function RocketRange() {
                 ? "onboard"
                 : "orbit",
         );
-      if (e.key === "Escape" && current.current.stage === "countdown")
-        setStage("armed");
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
@@ -679,15 +657,6 @@ export default function RocketRange() {
           </p>
         </div>
       )}
-      {stage === "countdown" && (
-        <div className="countdown-overlay" aria-live="assertive">
-          <span>RANGE CLEAR · IGNITION IN</span>
-          <strong key={countdown}>{countdown}</strong>
-          <button onClick={() => setStage("armed")}>
-            Abort countdown <span>ESC</span>
-          </button>
-        </div>
-      )}
       <div className="view-tools">
         <div className="camera-switch" role="group" aria-label="Camera view">
           {(
@@ -781,9 +750,7 @@ export default function RocketRange() {
             <button
               className={"launch-button " + (stage === "armed" ? "hot" : "")}
               disabled={
-                !ready ||
-                !!error ||
-                ["rocket", "engine", "countdown"].includes(stage)
+                !ready || !!error || ["rocket", "engine"].includes(stage)
               }
               onClick={() => {
                 if (stage === "pad") {
@@ -796,8 +763,6 @@ export default function RocketRange() {
                 <>
                   <RocketIcon size={18} /> Launch rocket <span>SPACE</span>
                 </>
-              ) : stage === "countdown" ? (
-                "Ignition sequence…"
               ) : (
                 <>
                   <KeyRound size={17} /> Insert safety key
@@ -1120,9 +1085,6 @@ export default function RocketRange() {
             </span>
             <span>
               <kbd>SPACE</kbd> Launch
-            </span>
-            <span>
-              <kbd>ESC</kbd> Abort countdown
             </span>
             <span>
               <Mouse size={16} /> Drag / scroll to explore

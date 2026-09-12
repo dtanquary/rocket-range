@@ -14,7 +14,7 @@ The following files come from [NASA 3D Resources](https://github.com/nasa/NASA-3
 
 The Mercury boosters and escape towers, Estes rocket recreations, the launch pad, launch controller, parachutes, and field geometry are original procedural meshes. Rocket dimensions and compatible engine selections are based on the manufacturer pages linked in `lib/rocket/catalog.ts`. They are not official downloadable Estes meshes. Source research and further imported asset attribution will be added here as assets are integrated.
 
-Motor curves are approximations normalized to representative total impulse; scale-fleet sizes, masses, motor mounts, and recovery equipment are game parameters. This is not an engineering flight predictor.
+Motor curves use sourced numerical thrust samples from ThrustCurve, with source URLs and provenance in `lib/rocket/motor-data.json`. Scale-fleet sizes, masses, motor mounts, and recovery equipment remain game parameters. This is not an engineering flight predictor.
 
 ## Falcon 9
 
@@ -27,3 +27,7 @@ See `public/models/ATTRIBUTION.md` for full download URLs, source terms, convers
 ## Current Estes recreation fleet
 
 Alpha III, Big Bertha, Baby Bertha, Big Daddy, Der Red Max, Mean Machine, Patriot M-104, Executioner, Cherokee-E, Bull Pup 12D, Red Nova, Super Big Bertha. Manufacturer references are linked per rocket in the catalog. Shape dimensions and flight parameters are approximate; paints and markings are original interpretations.
+
+## Motor data
+
+Numerical motor samples retrieved 2026-09-12 through the [ThrustCurve API](https://www.thrustcurve.org/info/api.html). A8, B6, C6, E12, E16, and F15 use files marked certification-source; C11 and D12 use contributed simulation samples. Source documents/files are not redistributed; the app includes the numerical time/thrust measurements and factual motor dimensions/masses, with per-record source URLs. These are representative curves, not a guarantee about any individual motor. See `SIMULATION.md`.

@@ -20,7 +20,8 @@ The user explicitly prioritizes realism: engine compatibility, wind, stability, 
 - `app/page.tsx`: entry point for the game.
 - `components/rocket-range.tsx`: React application, setup workflow, fleet selection, and flight UI.
 - `components/rocket/`: browser-only 3D integration.
-- `lib/rocket/catalog.ts`: rocket dimensions, visual parameters, engine compatibility, motor data, and sources.
+- `lib/rocket/catalog.ts`: rocket dimensions, visual parameters, engine compatibility, and estimated dry CG.
+- `lib/rocket/motor-data.json`: sourced motor samples and provenance; update deliberately.
 - `lib/rocket/physics.ts`: renderer-independent flight integration and prediction. SI units throughout.
 - `lib/rocket/models.ts`: mesh construction, imported model loading, equipment, recovery geometry, and thumbnail rendering.
 - `lib/rocket/environment.ts`: 3D field, lighting, sky, vegetation, and launch-site details.
@@ -33,7 +34,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 
 - Engines must be from the selected rocket's compatible list. Changing a rocket clears preparation and resets its recommended engine.
 - Require engine loading, pad placement, and controller arming before ignition.
-- Abort must work during countdown. Never allow configuration changes to mutate a flight in progress.
+- The launch button ignites immediately. Never allow configuration changes or other user actions to mutate a flight in progress.
 - Thrust ends at burnout. Ejection delay starts at burnout, not ignition or apogee.
 - Gravity, changing propellant mass, air-relative drag, wind drift, and parachute inflation affect flight.
 - Landed altitude must be zero. Flight reports must use actual recorded telemetry.
@@ -46,7 +47,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 - `npm run build`: production build. 
 - `npx tsc --noEmit`: TypeScript validation.
 - Add targeted behavioral tests for complex simulation changes; do not write tests that merely restate UI markup.
-- When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, abort, and at least one small viewport. Check console errors and asset failures.
+- When browser testing is requested, verify selection → engine → pad → arm → launch → recovery → relaunch, camera controls, configuration locking, and at least one small viewport. Check console errors and asset failures.
 - Never commit `.env` files, credentials, dependency folders, build output, or downloaded assets with unclear redistribution rights.
 
 ## Established implementation details
@@ -63,4 +64,14 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 
 ## Autonomous flight — explicit user requirement
 
-All flight decisions happen during preparation. After ignition, users observe the rocket; do not add steering, throttle, pause, time scaling, mid-flight reset, or changes to engine, ballast, wind, or recovery. Camera, sound, and display controls may change presentation only. Freeze the launch configuration at ignition so presentation changes cannot affect physics. Countdown abort is allowed before ignition. Desktop mouse and keyboard are the primary interface. The user has no additional must-have models or field requirements.
+All flight decisions happen during preparation. After ignition, users observe the rocket; do not add steering, throttle, pause, time scaling, mid-flight reset, or changes to engine, ballast, wind, or recovery. Camera, sound, and display controls may change presentation only. Freeze the launch configuration at ignition so presentation changes cannot affect physics. The launch button ignites immediately; no post-click countdown control is exposed. Desktop mouse and keyboard are the primary interface. The user has no additional must-have models or field requirements.
+
+## Realism model and validation
+
+- Read `SIMULATION.md` before changing physics assumptions. Document estimated properties as estimates. Do not present CG, canopy strength, or the simplified aerodynamic model as measured/certified.
+- Motor mass depletion follows integrated impulse, not a linear timer. Preserve exact source curve samples and per-motor provenance.
+- `flightConfiguration()` checks mount diameter, length, and engine variant, then clones and freezes every flight input. The field integrates against this snapshot until touchdown.
+- `FlightState.axis` is the simulated pitch/yaw attitude. The renderer must use this, not point the rocket along its velocity or invent weathercock angles.
+- Wind bearings use meteorological FROM directions. Rod bearing uses compass direction toward which the rod leans. North is -Z and east is +X.
+- A fixed-step accumulator catches up with elapsed time after a delayed display frame. Never discard physics time to maintain graphics FPS.
+- Tests cover compatibility, rod confinement, ballast/CG movement, restoring moments, wind symmetry, overload/late-ejection failures, launch snapshot isolation, and finite outcomes at the UI limits. Do not force every setup to recover successfully.
