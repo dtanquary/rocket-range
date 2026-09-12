@@ -25,6 +25,7 @@ The user explicitly prioritizes realism: engine compatibility, wind, stability, 
 - `lib/rocket/physics.ts`: renderer-independent flight integration and prediction. SI units throughout.
 - `lib/rocket/models.ts`: mesh construction, imported model loading, equipment, recovery geometry, and thumbnail rendering.
 - `lib/rocket/environment.ts`: 3D field, lighting, sky, vegetation, and launch-site details.
+- `lib/rocket/audio.ts`: procedural hobby-motor sound and browser audio resource lifecycle. Sound follows the motor curve; spatialization is presentation only.
 - `public/models/`: locally served assets. Keep source, creator, license, and modifications documented in `ASSETS.md`.
 - `tests/`: meaningful behavioral checks, especially flight/recovery invariants and workflow transitions.
 
@@ -63,6 +64,8 @@ The user explicitly requests local-only development for now. Run the app locally
 - NASA Mercury assets contain capsules, not full vehicles. Preserve the original booster/escape-tower assembly around them. The complete Saturn V and Falcon assets use the imported-mesh recovery split.
 - Original imported material and geometry resources can be shared by clones. Do not dispose a shared resource while another visible model still uses it. Include retired scene objects in teardown.
 - Keep canopy materials consolidated into two geometry groups, grass instanced, smoke pooled, and telemetry throttled to avoid avoidable draw calls or React work.
+- Use the sky's single scattered cloud layer; do not stack broad translucent cloud sheets over it. Preserve clear gaps for tracking small rockets.
+- Engine audio should be a small, dry hiss/crackle, without cinematic bass or reverberation. Mute must affect an active motor immediately, and dispose audio resources on teardown.
 - `public/models/ATTRIBUTION.md` records the full asset audit. Falcon mesh derivatives remain CC BY-SA 4.0 and must keep an accessible attribution/license link.
 - No database, authentication customization, or external APIs are required for the game. Do not add them without a product requirement.
 - Browser visual/interaction QA was unavailable in the initial environment because no browser was connected. Do not describe source checks or numerical tests as a successful browser playthrough.

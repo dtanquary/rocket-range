@@ -37,6 +37,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import Field, { type CameraMode, type Stage } from "@/components/rocket/field";
+import { RangeAudio } from "@/lib/rocket/audio";
 import {
   ROCKETS,
   getMotor,
@@ -64,57 +65,8 @@ function fmt(n: number, digits = 0) {
     minimumFractionDigits: digits,
   });
 }
-let audioCtx: AudioContext | null = null;
-let masterGain: GainNode | null = null;
-function audioDestination() {
-  if (!masterGain && audioCtx) {
-    masterGain = audioCtx.createGain();
-    masterGain.connect(audioCtx.destination);
-  }
-  return masterGain!;
-}
-function beep(frequency = 660, duration = 0.09, volume = 0.06) {
-  try {
-    audioCtx ??= new AudioContext();
-    void audioCtx.resume();
-    const o = audioCtx.createOscillator(),
-      g = audioCtx.createGain();
-    o.frequency.value = frequency;
-    o.connect(g);
-    g.connect(audioDestination());
-    g.gain.setValueAtTime(volume, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    o.start();
-    o.stop(audioCtx.currentTime + duration);
-  } catch {}
-}
-function roar(duration: number) {
-  try {
-    audioCtx ??= new AudioContext();
-    void audioCtx.resume();
-    const buffer = audioCtx.createBuffer(
-      1,
-      audioCtx.sampleRate * duration,
-      audioCtx.sampleRate,
-    );
-    const a = buffer.getChannelData(0);
-    for (let i = 0; i < a.length; i++) a[i] = (Math.random() * 2 - 1) * 0.35;
-    const s = audioCtx.createBufferSource(),
-      filter = audioCtx.createBiquadFilter(),
-      g = audioCtx.createGain();
-    s.buffer = buffer;
-    filter.type = "lowpass";
-    filter.frequency.value = 1100;
-    s.connect(filter);
-    filter.connect(g);
-    g.connect(audioDestination());
-    g.gain.setValueAtTime(0.01, audioCtx.currentTime);
-    g.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.1);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    s.start();
-  } catch {}
-}
 export default function RocketRange() {
+  const [audio] = useState(() => new RangeAudio());
   const [rocketId, setRocketId] = useState("alpha"),
     [motorId, setMotorId] = useState("B6-4"),
     [stage, setStage] = useState<Stage>("rocket"),
@@ -143,13 +95,9 @@ export default function RocketRange() {
     "All rockets" | "Estes classics" | "Scale fleet"
   >("All rockets");
   useEffect(() => {
-    if (masterGain && audioCtx)
-      masterGain.gain.setTargetAtTime(
-        sound ? 1 : 0,
-        audioCtx.currentTime,
-        0.03,
-      );
-  }, [sound]);
+    audio.setMuted(!sound);
+  }, [audio, sound]);
+  useEffect(() => () => audio.dispose(), [audio]);
   const rocket = ROCKETS.find((r) => r.id === rocketId)!,
     motor = getMotor(motorId);
   const prediction = useMemo(
@@ -192,9 +140,10 @@ export default function RocketRange() {
   };
   const launch = useCallback(() => {
     if (current.current.stage !== "armed") return;
-    if (current.current.sound) roar(current.current.motor.burn);
+    audio.setMuted(!current.current.sound);
+    audio.ignite(current.current.motor);
     setStage("flight");
-  }, []);
+  }, [audio]);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (
@@ -250,6 +199,7 @@ export default function RocketRange() {
     <main className="range-app">
       <div className="world">
         <Field
+          audio={audio}
           rocket={rocket}
           motor={motor}
           conditions={conditions}
@@ -496,7 +446,7 @@ export default function RocketRange() {
             onClick={() => {
               if (!engineFits(rocket, motor)) return;
               setStage("engine");
-              if (sound) beep(880);
+              if (sound) audio.beep(880);
             }}
           >
             <PackageOpen size={16} /> Load {motor.id} engine{" "}
@@ -554,7 +504,7 @@ export default function RocketRange() {
             onClick={() => {
               setStage("pad");
               setCamera("follow");
-              if (sound) beep(760);
+              if (sound) audio.beep(760);
             }}
           >
             Place on launch pad <MoveUpRight size={16} />
@@ -754,7 +704,7 @@ export default function RocketRange() {
               onClick={() => {
                 if (stage === "pad") {
                   setStage("armed");
-                  if (sound) beep(990, 0.12);
+                  if (sound) audio.beep(990, 0.12);
                 } else launch();
               }}
             >

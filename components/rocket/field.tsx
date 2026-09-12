@@ -3,6 +3,7 @@ import { useEffect, useRef } from "react";
 import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { buildEnvironment } from "@/lib/rocket/environment";
+import type { RangeAudio } from "@/lib/rocket/audio";
 import {
   createRocket,
   createPad,
@@ -25,6 +26,7 @@ import {
 export type Stage = "rocket" | "engine" | "pad" | "armed" | "flight" | "landed";
 export type CameraMode = "orbit" | "follow" | "ground" | "onboard";
 export type FieldProps = {
+  audio: RangeAudio;
   rocket: Rocket;
   motor: Motor;
   conditions: Conditions;
@@ -286,6 +288,8 @@ export default function Field(props: FieldProps) {
       up = new T.Vector3(0, 1, 0),
       vel = new T.Vector3();
     const desiredQuat = new T.Quaternion();
+    const audioForward = new T.Vector3(),
+      audioUp = new T.Vector3();
     const onContextLost = (event: Event) => {
       event.preventDefault();
       latest.current.onError(
@@ -582,6 +586,14 @@ export default function Field(props: FieldProps) {
         camera.fov = T.MathUtils.lerp(camera.fov, 44, dt * 5);
         camera.updateProjectionMatrix();
       }
+      camera.getWorldDirection(audioForward);
+      audioUp.set(0, 1, 0).applyQuaternion(camera.quaternion);
+      p.audio.updateSpatial(
+        rocketRoot.position,
+        camera.position,
+        audioForward,
+        audioUp,
+      );
       renderer.render(scene, camera);
       if (!ready) {
         ready = true;
