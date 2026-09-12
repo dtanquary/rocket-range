@@ -4,6 +4,7 @@ import * as T from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { buildEnvironment } from "@/lib/rocket/environment";
 import type { RangeAudio } from "@/lib/rocket/audio";
+import { FollowCameraRig, positionOnboardCamera } from "@/lib/rocket/cameras";
 import {
   createRocket,
   createPad,
@@ -23,10 +24,12 @@ import {
   type FlightState,
   type Conditions,
 } from "@/lib/rocket/physics";
-export type Stage = "rocket" | "engine" | "pad" | "armed" | "flight" | "landed";
+export type Stage =
+  "rocket" | "engine" | "pad" | "armed" | "igniting" | "flight" | "landed";
 export type CameraMode = "orbit" | "follow" | "ground" | "onboard";
 export type FieldProps = {
   audio: RangeAudio;
+  launchConfig: ReturnType<typeof flightConfiguration> | null;
   rocket: Rocket;
   motor: Motor;
   conditions: Conditions;
@@ -288,6 +291,7 @@ export default function Field(props: FieldProps) {
       up = new T.Vector3(0, 1, 0),
       vel = new T.Vector3();
     const desiredQuat = new T.Quaternion();
+    const followRig = new FollowCameraRig();
     const audioForward = new T.Vector3(),
       audioUp = new T.Vector3();
     const onContextLost = (event: Event) => {
@@ -313,7 +317,9 @@ export default function Field(props: FieldProps) {
       if (activeId !== p.rocket.id) setRocket(p.rocket);
       if (p.stage !== lastStage) {
         if (p.stage === "flight") {
-          flightConfig = flightConfiguration(p.rocket, p.motor, p.conditions);
+          flightConfig =
+            p.launchConfig ??
+            flightConfiguration(p.rocket, p.motor, p.conditions);
           flight = newFlight(flightConfig.conditions);
           accumulator = 0;
           trailCount = 0;
@@ -538,7 +544,10 @@ export default function Field(props: FieldProps) {
       if (mode !== lastCamera) {
         lastCamera = mode;
         controls.enabled = mode === "orbit";
+        if (mode === "follow") followRig.reset(camera, focus);
       }
+      // Onboard has body-relative roll. Other views retain their existing horizon.
+      camera.up.set(0, 1, 0);
       controls.enabled = mode === "orbit";
       if (mode === "orbit") {
         if (flying) {
@@ -554,12 +563,14 @@ export default function Field(props: FieldProps) {
         }
         controls.update();
       } else if (mode === "follow") {
-        const d = Math.max(0.65, p.rocket.length * 2);
-        desiredPos
-          .copy(focus)
-          .add(new T.Vector3(d * 0.8, Math.max(0.4, d * 0.33), d * 1.35));
-        camera.position.lerp(desiredPos, Math.min(1, dt * (flying ? 5 : 2)));
-        camera.lookAt(focus);
+        followRig.update(
+          camera,
+          focus,
+          p.rocket.length,
+          p.rocket.chute,
+          inflation,
+          dt,
+        );
       } else if (mode === "ground") {
         desiredPos.set(6, 1.65, 9);
         camera.position.lerp(desiredPos, dt * 4);
@@ -571,14 +582,11 @@ export default function Field(props: FieldProps) {
         );
         camera.updateProjectionMatrix();
       } else {
-        desiredPos
-          .copy(rocketRoot.position)
-          .add(new T.Vector3(0.12, p.rocket.length * 0.8, 0.12));
-        camera.position.copy(desiredPos);
-        camera.lookAt(
-          rocketRoot.position.x + 1,
-          Math.max(0, rocketRoot.position.y - 3),
-          rocketRoot.position.z + 1,
+        positionOnboardCamera(
+          camera,
+          rocketRoot,
+          p.rocket.length,
+          p.rocket.diameter,
         );
       }
       if (mode !== "orbit") controls.target.copy(focus);

@@ -26,6 +26,7 @@ The user explicitly prioritizes realism: engine compatibility, wind, stability, 
 - `lib/rocket/models.ts`: mesh construction, imported model loading, equipment, recovery geometry, and thumbnail rendering.
 - `lib/rocket/environment.ts`: 3D field, lighting, sky, vegetation, and launch-site details.
 - `lib/rocket/audio.ts`: procedural hobby-motor sound and browser audio resource lifecycle. Sound follows the motor curve; spatialization is presentation only.
+- `lib/rocket/cameras.ts`: Follow camera boom and airframe-mounted Onboard camera transforms.
 - `public/models/`: locally served assets. Keep source, creator, license, and modifications documented in `ASSETS.md`.
 - `tests/`: meaningful behavioral checks, especially flight/recovery invariants and workflow transitions.
 
@@ -35,7 +36,7 @@ Use React and TypeScript with Three.js. Keep high-frequency simulation/render st
 
 - Engines must be from the selected rocket's compatible list. Changing a rocket clears preparation and resets its recommended engine.
 - Require engine loading, pad placement, and controller arming before ignition.
-- The launch button ignites immediately. Never allow configuration changes or other user actions to mutate a flight in progress.
+- Pressing Launch captures the configuration and energizes the igniter. The user requests a random 0.25–1 second delay before ignition. Lock physical setup throughout that delay and flight; repeated launch inputs must not schedule additional ignitions.
 - Ignition must preserve the user's selected camera mode, whether triggered by the launch button or Space. Do not automatically switch to Follow at launch.
 - Thrust ends at burnout. Ejection delay starts at burnout, not ignition or apogee.
 - Gravity, changing propellant mass, air-relative drag, wind drift, and parachute inflation affect flight.
@@ -72,13 +73,15 @@ The user explicitly requests local-only development for now. Run the app locally
 
 ## Autonomous flight — explicit user requirement
 
-All flight decisions happen during preparation. After ignition, users observe the rocket; do not add steering, throttle, pause, time scaling, mid-flight reset, or changes to engine, ballast, wind, or recovery. Camera, sound, and display controls may change presentation only. Freeze the launch configuration at ignition so presentation changes cannot affect physics. The launch button ignites immediately; no post-click countdown control is exposed. Desktop mouse and keyboard are the primary interface. The user has no additional must-have models or field requirements.
+All flight decisions happen during preparation. After pressing Launch, users observe the rocket; do not add steering, throttle, pause, time scaling, mid-flight reset, or changes to engine, ballast, wind, or recovery. Camera, sound, and display controls may change presentation only. Freeze the launch configuration when the button is pressed so presentation changes cannot affect physics. Apply a random 0.25–1 second igniter delay, then start motor audio and physical flight. No countdown/abort control is exposed. Desktop mouse and keyboard are the primary interface. The user has no additional must-have models or field requirements.
+
+Follow camera position and aim must share the same translating anchor: smoothing only the camera position causes angular shake during recovery. Smooth boom/framing changes and include the canopy in recovery framing. Onboard position, view direction, and roll are attached to the rendered airframe. Reset the camera up vector when leaving Onboard so other views retain their horizon.
 
 ## Realism model and validation
 
 - Read `SIMULATION.md` before changing physics assumptions. Document estimated properties as estimates. Do not present CG, canopy strength, or the simplified aerodynamic model as measured/certified.
 - Motor mass depletion follows integrated impulse, not a linear timer. Preserve exact source curve samples and per-motor provenance.
-- `flightConfiguration()` checks mount diameter, length, and engine variant, then clones and freezes every flight input. The field integrates against this snapshot until touchdown.
+- `flightConfiguration()` checks mount diameter, length, and engine variant, then clones and freezes every flight input when Launch is pressed. The field integrates against this snapshot after ignition until touchdown.
 - `FlightState.axis` is the simulated pitch/yaw attitude. The renderer must use this, not point the rocket along its velocity or invent weathercock angles.
 - Wind bearings use meteorological FROM directions. Rod bearing uses compass direction toward which the rod leans. North is -Z and east is +X.
 - A fixed-step accumulator catches up with elapsed time after a delayed display frame. Never discard physics time to maintain graphics FPS.
