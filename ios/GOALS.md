@@ -59,3 +59,5 @@ Measure sustained frame pacing, memory, thermal behavior, battery use, accessibi
 - Browser isolation complete: TypeScript, all 19 browser tests, production build, and privacy check pass from `web/`; local Vite server remains available.
 - Native flight core implemented in C# with no Unity engine references. Nine Unity Edit Mode tests pass, including comparison of 82 calm/windy catalog flights against the browser reference to within 0.00002 in the checked SI metrics. Compatibility, immutable launch capture, ignition limits, recovery failures, and elapsed-time catch-up are covered.
 - Unity iOS Build Support is installed. Native visual scene and touch interface are in progress.
+
+- Native scene now includes the procedural field and launch equipment, all 16 rocket choices, four imported GLBs with recovery splitting, engine/setup controls, four cameras, automatic flight, and procedural motor audio. Twelve Unity Edit Mode tests pass, including camera attachment/descent stability and motor PCM checks. iOS Simulator export and visual playthrough are being checked next.

@@ -1,1 +1,13 @@
-{"name":"RocketRange.Tests","references":["RocketRange.Core"],"includePlatforms":["Editor"],"optionalUnityReferences":["TestAssemblies"]}
+{
+  "name": "RocketRange.Tests",
+  "references": [
+    "RocketRange.Core",
+    "RocketRange.Presentation"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

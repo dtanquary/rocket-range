@@ -1,0 +1,9 @@
+Rocket Range original code and procedural geometry: MIT License, copyright 2026 Rocket Range Contributors.
+
+Estes airframes, launch pad, and controller are original parametric recreations, not official imported Estes assets. This project is not affiliated with Estes, NASA, or SpaceX.
+
+Saturn V and Mercury capsule meshes: NASA 3D Resources. The Mercury files contain capsules only; the native game adds original boosters and escape towers. Source and usage links are preserved in Models/ATTRIBUTION.md.
+
+Falcon 9: adapted from Fac-tory-o's Falcon 9 Full Thrust STL on Wikimedia Commons, CC BY-SA 4.0. The browser GLB conversion is reused; the native game rescales and splits it for model-rocket parachute recovery. Mesh derivatives remain CC BY-SA 4.0. Attribution and license links are available below.
+
+Motor thrust samples: ThrustCurve. The exact source URL and certification-derived or contributed classification are retained for every motor. Virtual scale mounts, aerodynamic coefficients, finished dry CG, and canopy strength are game estimates.
