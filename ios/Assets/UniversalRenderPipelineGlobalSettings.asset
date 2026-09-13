@@ -68,27 +68,41 @@ MonoBehaviour:
       - rid: 3522811361235828768
       - rid: 3522811361235828769
     m_RuntimeSettings:
-      m_List: []
+      m_List:
+      - rid: 3522811361235828737
+      - rid: 3522811361235828738
+      - rid: 3522811361235828739
+      - rid: 3522811361235828740
+      - rid: 3522811361235828744
+      - rid: 3522811361235828747
+      - rid: 3522811361235828751
+      - rid: 3522811361235828752
+      - rid: 3522811361235828755
+      - rid: 3522811361235828758
+      - rid: 3522811361235828759
+      - rid: 3522811361235828761
+      - rid: 3522811361235828762
+      - rid: 3522811361235828766
   m_AssetVersion: 10
   m_ObsoleteDefaultVolumeProfile: {fileID: 0}
   m_RenderingLayerNames:
   - Default
   m_ValidRenderingLayers: 0
-  lightLayerName0: 
-  lightLayerName1: 
-  lightLayerName2: 
-  lightLayerName3: 
-  lightLayerName4: 
-  lightLayerName5: 
-  lightLayerName6: 
-  lightLayerName7: 
+  lightLayerName0:
+  lightLayerName1:
+  lightLayerName2:
+  lightLayerName3:
+  lightLayerName4:
+  lightLayerName5:
+  lightLayerName6:
+  lightLayerName7:
   apvScenesData:
     obsoleteSceneBounds:
       m_Keys: []
       m_Values: []
     obsoleteHasProbeVolumes:
       m_Keys: []
-      m_Values: 
+      m_Values:
   references:
     version: 2
     RefIds:
@@ -384,7 +398,7 @@ MonoBehaviour:
         m_version: 0
         m_IncludeReferencedInScenes: 0
         m_IncludeAssetsByLabel: 0
-        m_LabelToInclude: 
+        m_LabelToInclude:
     - rid: 3522811361235828765
       type: {class: RenderingDebuggerRuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:

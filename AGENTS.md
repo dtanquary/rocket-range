@@ -8,7 +8,7 @@
 - Read `web/AGENTS.md` before browser changes and `ios/AGENTS.md` before native changes.
 - Run locally. GitHub is for source sharing only. Do not add hosting, deployment integrations, GitHub Actions, Dependabot, or other repository automation without an explicit user request.
 - Preserve user edits. Keep local credentials, personal account paths, signing identities, team IDs, and build output out of Git.
-- Use a GitHub noreply contributor email. Run `node web/scripts/check-public-repo.mjs` from the repository root and Gitleaks before pushing.
+- Use a GitHub noreply contributor email or the repository's neutral contributor identity, never a personal email. Run `node web/scripts/check-public-repo.mjs` from the repository root and Gitleaks before pushing.
 - Original code is MIT. Third-party assets retain their own terms. Preserve asset attribution when copying or converting models; an Estes recreation is not an official imported Estes asset.
 
 ## Layout

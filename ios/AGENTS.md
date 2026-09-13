@@ -10,3 +10,5 @@ Read `../AGENTS.md`, `GOALS.md`, and `../web/SIMULATION.md` first.
 - A local build command is permitted. Do not add hosting, cloud builds, GitHub Actions, or deployment automation.
 - Test compatibility, ejection timing, drift, stability, immutable launches, camera independence, and finite catalog outcomes. Compare the port against saved browser reference results before changing the physical model.
 - Record actual editor/build/device verification in `GOALS.md`. Keep future fidelity goals separate from completed implementation.
+- Use SMAA with a single render-target sample for the current Simulator baseline. HDR MSAA produced render-pass attachment errors on the tested iOS Simulator; validate any quality change on both Simulator and hardware.
+- Keep procedural mesh normals outward-facing and destroy only runtime-owned meshes/materials. Imported assets and shared paint materials must remain reusable across fleet selections.

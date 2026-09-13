@@ -4,6 +4,8 @@ A native Unity game with a procedural launch field, 16 model rockets, compatible
 
 This is the first playable native foundation. [GOALS.md](GOALS.md) records completed verification separately from the planned fidelity, interaction, and device-performance work.
 
+Verified locally: 14 native tests pass, and the ARM64 iOS Simulator app builds in Xcode and launches on an iPad simulator. Visual/touch playthrough is still pending because the beta Device Hub connection timed out; physical-device testing and visual polish remain ahead.
+
 ## Open and play
 
 1. Install **Unity 6000.3.11f1** in Unity Hub, including **iOS Build Support**. Package versions are pinned in `Packages/`.
