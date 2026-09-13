@@ -1,0 +1,1871 @@
+{
+  "rockets": [
+    {
+      "id": "alpha",
+      "name": "Alpha III",
+      "family": "Estes classics",
+      "subtitle": "The first-flight classic",
+      "length": 0.307,
+      "diameter": 0.025,
+      "mass": 0.034,
+      "chute": 0.305,
+      "color": "#f4f0de",
+      "accent": "#f35a17",
+      "nose": "#f35a17",
+      "fins": 3,
+      "finSpan": 0.043,
+      "finHeight": 0.067,
+      "noseRatio": 0.24,
+      "motors": [
+        "A8-3",
+        "B6-4",
+        "C6-5",
+        "C6-7"
+      ],
+      "recommended": "B6-4",
+      "drag": 0.56,
+      "source": "https://estesrockets.com/products/alpha-iii-launch-set",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "bertha",
+      "name": "Big Bertha",
+      "family": "Estes classics",
+      "subtitle": "Slow lift. Big personality.",
+      "length": 0.61,
+      "diameter": 0.042,
+      "mass": 0.071,
+      "chute": 0.457,
+      "color": "#f7bf17",
+      "accent": "#16191a",
+      "nose": "#171a1c",
+      "fins": 4,
+      "finSpan": 0.078,
+      "finHeight": 0.17,
+      "noseRatio": 0.2,
+      "motors": [
+        "B6-4",
+        "C6-5"
+      ],
+      "recommended": "C6-5",
+      "drag": 0.64,
+      "source": "https://estesrockets.com/products/big-bertha",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "baby",
+      "name": "Baby Bertha",
+      "family": "Estes classics",
+      "subtitle": "A pocket-sized favorite",
+      "length": 0.325,
+      "diameter": 0.042,
+      "mass": 0.054,
+      "chute": 0.305,
+      "color": "#25272a",
+      "accent": "#ee4030",
+      "nose": "#27282b",
+      "fins": 4,
+      "finSpan": 0.05,
+      "finHeight": 0.075,
+      "noseRatio": 0.28,
+      "motors": [
+        "A8-3",
+        "B6-4",
+        "C6-5"
+      ],
+      "recommended": "B6-4",
+      "drag": 0.6,
+      "source": "https://estesrockets.com/products/baby-bertha",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "daddy",
+      "name": "Big Daddy",
+      "family": "Estes classics",
+      "subtitle": "Wide body. Powerful liftoff.",
+      "length": 0.483,
+      "diameter": 0.076,
+      "mass": 0.15,
+      "chute": 0.61,
+      "color": "#f4d52e",
+      "accent": "#202025",
+      "nose": "#242328",
+      "fins": 4,
+      "finSpan": 0.075,
+      "finHeight": 0.135,
+      "noseRatio": 0.4,
+      "motors": [
+        "C11-3",
+        "D12-3",
+        "E12-4"
+      ],
+      "recommended": "D12-3",
+      "drag": 0.56,
+      "source": "https://estesrockets.com/products/big-daddy",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.47
+    },
+    {
+      "id": "max",
+      "name": "Der Red Max",
+      "family": "Estes classics",
+      "subtitle": "The unmistakable red legend",
+      "length": 0.419,
+      "diameter": 0.042,
+      "mass": 0.068,
+      "chute": 0.457,
+      "color": "#cf2824",
+      "accent": "#151719",
+      "nose": "#16191b",
+      "fins": 3,
+      "finSpan": 0.064,
+      "finHeight": 0.13,
+      "noseRatio": 0.3,
+      "motors": [
+        "B6-4",
+        "C6-5"
+      ],
+      "recommended": "C6-5",
+      "drag": 0.62,
+      "source": "https://estesrockets.com/products/der-red-max",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "mean",
+      "name": "Mean Machine",
+      "family": "Estes classics",
+      "subtitle": "Two meters of attitude",
+      "length": 2.032,
+      "diameter": 0.042,
+      "mass": 0.241,
+      "chute": 0.61,
+      "color": "#111c24",
+      "accent": "#eaedec",
+      "nose": "#161b22",
+      "fins": 3,
+      "finSpan": 0.055,
+      "finHeight": 0.15,
+      "noseRatio": 0.067,
+      "motors": [
+        "D12-3",
+        "E12-4",
+        "E12-6"
+      ],
+      "recommended": "E12-4",
+      "drag": 0.62,
+      "source": "https://estesrockets.com/products/mean-machine",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.47
+    },
+    {
+      "id": "patriot",
+      "name": "Patriot M-104",
+      "family": "Estes classics",
+      "subtitle": "A field-ready scale classic",
+      "length": 0.533,
+      "diameter": 0.041,
+      "mass": 0.057,
+      "chute": 0.305,
+      "color": "#edece0",
+      "accent": "#b92727",
+      "nose": "#e4b724",
+      "fins": 4,
+      "finSpan": 0.043,
+      "finHeight": 0.1,
+      "noseRatio": 0.22,
+      "motors": [
+        "B6-4",
+        "C6-5"
+      ],
+      "recommended": "C6-5",
+      "drag": 0.55,
+      "source": "https://estesrockets.com/products/patriot-m-104",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "executioner",
+      "name": "Executioner",
+      "family": "Estes classics",
+      "subtitle": "A commanding D and E flyer",
+      "length": 0.965,
+      "diameter": 0.066,
+      "mass": 0.235,
+      "chute": 0.61,
+      "color": "#d8dadd",
+      "accent": "#76439c",
+      "nose": "#24252c",
+      "fins": 3,
+      "finSpan": 0.09,
+      "finHeight": 0.23,
+      "noseRatio": 0.22,
+      "motors": [
+        "D12-3",
+        "E12-4",
+        "E12-6"
+      ],
+      "recommended": "E12-4",
+      "drag": 0.65,
+      "source": "https://estesrockets.com/products/executioner",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.47
+    },
+    {
+      "id": "cherokee",
+      "name": "Cherokee-E",
+      "family": "Estes classics",
+      "subtitle": "A long, clean climb",
+      "length": 0.75,
+      "diameter": 0.033,
+      "mass": 0.163,
+      "chute": 0.457,
+      "color": "#eee9d7",
+      "accent": "#d63c24",
+      "nose": "#da3d24",
+      "fins": 3,
+      "finSpan": 0.05,
+      "finHeight": 0.125,
+      "noseRatio": 0.18,
+      "motors": [
+        "D12-5",
+        "D12-7",
+        "E12-6"
+      ],
+      "recommended": "D12-5",
+      "drag": 0.5,
+      "source": "https://estesrockets.com/products/cherokee",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.47
+    },
+    {
+      "id": "bullpup",
+      "name": "Bull Pup 12D",
+      "family": "Estes classics",
+      "subtitle": "A detailed sport-scale favorite",
+      "length": 0.396,
+      "diameter": 0.034,
+      "mass": 0.051,
+      "chute": 0.305,
+      "color": "#e8e9e2",
+      "accent": "#e6e7e0",
+      "nose": "#eeece4",
+      "fins": 4,
+      "finSpan": 0.039,
+      "finHeight": 0.07,
+      "noseRatio": 0.31,
+      "motors": [
+        "A8-3",
+        "B6-4",
+        "C6-5"
+      ],
+      "recommended": "B6-4",
+      "drag": 0.66,
+      "source": "https://estesrockets.com/products/bull-pup-12d",
+      "mountDiameter": 18,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "nova",
+      "name": "Red Nova",
+      "family": "Estes classics",
+      "subtitle": "The bold D-engine flyer",
+      "length": 0.549,
+      "diameter": 0.042,
+      "mass": 0.085,
+      "chute": 0.381,
+      "color": "#e8e9e5",
+      "accent": "#c7302b",
+      "nose": "#d63a2b",
+      "fins": 4,
+      "finSpan": 0.055,
+      "finHeight": 0.15,
+      "noseRatio": 0.22,
+      "motors": [
+        "C11-3",
+        "D12-5",
+        "D12-7"
+      ],
+      "recommended": "D12-5",
+      "drag": 0.61,
+      "source": "https://estesrockets.com/products/red-nova",
+      "mountDiameter": 24,
+      "mountLength": 70,
+      "dryCg": 0.47
+    },
+    {
+      "id": "superbertha",
+      "name": "Super Big Bertha",
+      "family": "Estes classics",
+      "subtitle": "A Pro Series powerhouse",
+      "length": 0.935,
+      "diameter": 0.066,
+      "mass": 0.2523,
+      "chute": 0.61,
+      "color": "#e8e7df",
+      "accent": "#cf342e",
+      "nose": "#e7e5de",
+      "fins": 4,
+      "finSpan": 0.081,
+      "finHeight": 0.255,
+      "noseRatio": 0.21,
+      "motors": [
+        "E16-4",
+        "F15-6"
+      ],
+      "recommended": "E16-4",
+      "drag": 0.66,
+      "source": "https://estesrockets.com/products/super-big-bertha",
+      "mountDiameter": 29,
+      "mountLength": 114,
+      "dryCg": 0.47
+    },
+    {
+      "id": "falcon",
+      "name": "Falcon 9",
+      "family": "Scale fleet",
+      "subtitle": "SpaceX · miniature tribute",
+      "length": 0.96,
+      "diameter": 0.052,
+      "mass": 0.18,
+      "chute": 0.61,
+      "color": "#eeeeeb",
+      "accent": "#15191d",
+      "nose": "#efeee9",
+      "fins": 4,
+      "finSpan": 0.045,
+      "finHeight": 0.09,
+      "noseRatio": 0.15,
+      "motors": [
+        "D12-3",
+        "E12-4"
+      ],
+      "recommended": "E12-4",
+      "drag": 0.5,
+      "shape": "falcon",
+      "source": "https://www.spacex.com/vehicles/falcon-9/",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.46
+    },
+    {
+      "id": "saturn",
+      "name": "Saturn V",
+      "family": "Scale fleet",
+      "subtitle": "Apollo · miniature tribute",
+      "length": 1.1,
+      "diameter": 0.1,
+      "mass": 0.3,
+      "chute": 0.76,
+      "color": "#eeeae1",
+      "accent": "#191c20",
+      "nose": "#efebe2",
+      "fins": 4,
+      "finSpan": 0.065,
+      "finHeight": 0.09,
+      "noseRatio": 0.18,
+      "motors": [
+        "E12-4"
+      ],
+      "recommended": "E12-4",
+      "drag": 0.6,
+      "shape": "saturn",
+      "source": "https://science.nasa.gov/3d-resources/",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.38
+    },
+    {
+      "id": "redstone",
+      "name": "Mercury-Redstone",
+      "family": "Scale fleet",
+      "subtitle": "Freedom 7 · miniature tribute",
+      "length": 0.72,
+      "diameter": 0.051,
+      "mass": 0.125,
+      "chute": 0.51,
+      "color": "#f1eee5",
+      "accent": "#181b21",
+      "nose": "#21252a",
+      "fins": 4,
+      "finSpan": 0.055,
+      "finHeight": 0.11,
+      "noseRatio": 0.22,
+      "motors": [
+        "C11-3",
+        "D12-3",
+        "E12-4"
+      ],
+      "recommended": "D12-3",
+      "drag": 0.63,
+      "shape": "redstone",
+      "source": "https://science.nasa.gov/3d-resources/",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.47
+    },
+    {
+      "id": "atlas",
+      "name": "Mercury-Atlas",
+      "family": "Scale fleet",
+      "subtitle": "Friendship 7 · miniature tribute",
+      "length": 0.81,
+      "diameter": 0.079,
+      "mass": 0.19,
+      "chute": 0.61,
+      "color": "#aab2b6",
+      "accent": "#11171d",
+      "nose": "#22272b",
+      "fins": 3,
+      "finSpan": 0.05,
+      "finHeight": 0.11,
+      "noseRatio": 0.22,
+      "motors": [
+        "D12-3",
+        "E12-4"
+      ],
+      "recommended": "E12-4",
+      "drag": 0.52,
+      "shape": "atlas",
+      "source": "https://science.nasa.gov/3d-resources/",
+      "mountDiameter": 24,
+      "mountLength": 95,
+      "dryCg": 0.4
+    }
+  ],
+  "motors": [
+    {
+      "id": "A8-3",
+      "diameter": 18,
+      "length": 70,
+      "mass": 0.016300000000000002,
+      "propellant": 0.0033,
+      "impulse": 2.150398,
+      "burn": 0.534,
+      "delay": 3,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.016,
+          "force": 1.08
+        },
+        {
+          "time": 0.036,
+          "force": 0.293
+        },
+        {
+          "time": 0.05,
+          "force": 0.259
+        },
+        {
+          "time": 0.06,
+          "force": 0.357
+        },
+        {
+          "time": 0.07,
+          "force": 0.419
+        },
+        {
+          "time": 0.08,
+          "force": 0.355
+        },
+        {
+          "time": 0.102,
+          "force": 0.781
+        },
+        {
+          "time": 0.124,
+          "force": 1.443
+        },
+        {
+          "time": 0.152,
+          "force": 2.966
+        },
+        {
+          "time": 0.17,
+          "force": 4.426
+        },
+        {
+          "time": 0.202,
+          "force": 7.16
+        },
+        {
+          "time": 0.224,
+          "force": 9.051
+        },
+        {
+          "time": 0.246,
+          "force": 9.555
+        },
+        {
+          "time": 0.256,
+          "force": 9.317
+        },
+        {
+          "time": 0.276,
+          "force": 7.958
+        },
+        {
+          "time": 0.294,
+          "force": 6.108
+        },
+        {
+          "time": 0.326,
+          "force": 4.235
+        },
+        {
+          "time": 0.35,
+          "force": 3.813
+        },
+        {
+          "time": 0.376,
+          "force": 3.997
+        },
+        {
+          "time": 0.41,
+          "force": 3.926
+        },
+        {
+          "time": 0.452,
+          "force": 3.724
+        },
+        {
+          "time": 0.474,
+          "force": 4.046
+        },
+        {
+          "time": 0.502,
+          "force": 4.092
+        },
+        {
+          "time": 0.532,
+          "force": 4.146
+        },
+        {
+          "time": 0.534,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e90000000897/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "B6-4",
+      "diameter": 18,
+      "length": 70,
+      "mass": 0.0191,
+      "propellant": 0.0056,
+      "impulse": 4.3278615,
+      "burn": 0.857,
+      "delay": 4,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.036,
+          "force": 1.364
+        },
+        {
+          "time": 0.064,
+          "force": 2.727
+        },
+        {
+          "time": 0.082,
+          "force": 4.215
+        },
+        {
+          "time": 0.111,
+          "force": 6.694
+        },
+        {
+          "time": 0.135,
+          "force": 9.05
+        },
+        {
+          "time": 0.146,
+          "force": 9.545
+        },
+        {
+          "time": 0.172,
+          "force": 11.901
+        },
+        {
+          "time": 0.181,
+          "force": 12.149
+        },
+        {
+          "time": 0.191,
+          "force": 11.901
+        },
+        {
+          "time": 0.211,
+          "force": 9.174
+        },
+        {
+          "time": 0.239,
+          "force": 7.314
+        },
+        {
+          "time": 0.264,
+          "force": 6.074
+        },
+        {
+          "time": 0.275,
+          "force": 5.95
+        },
+        {
+          "time": 0.333,
+          "force": 5.207
+        },
+        {
+          "time": 0.394,
+          "force": 4.835
+        },
+        {
+          "time": 0.445,
+          "force": 4.835
+        },
+        {
+          "time": 0.556,
+          "force": 4.339
+        },
+        {
+          "time": 0.667,
+          "force": 4.587
+        },
+        {
+          "time": 0.723,
+          "force": 4.339
+        },
+        {
+          "time": 0.78,
+          "force": 4.339
+        },
+        {
+          "time": 0.793,
+          "force": 4.091
+        },
+        {
+          "time": 0.812,
+          "force": 2.603
+        },
+        {
+          "time": 0.833,
+          "force": 1.24
+        },
+        {
+          "time": 0.857,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e90000000414/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "C6-5",
+      "diameter": 18,
+      "length": 70,
+      "mass": 0.0241,
+      "propellant": 0.0108,
+      "impulse": 8.817238,
+      "burn": 1.86,
+      "delay": 5,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.031,
+          "force": 0.946
+        },
+        {
+          "time": 0.092,
+          "force": 4.826
+        },
+        {
+          "time": 0.139,
+          "force": 9.936
+        },
+        {
+          "time": 0.192,
+          "force": 14.09
+        },
+        {
+          "time": 0.209,
+          "force": 11.446
+        },
+        {
+          "time": 0.231,
+          "force": 7.381
+        },
+        {
+          "time": 0.248,
+          "force": 6.151
+        },
+        {
+          "time": 0.292,
+          "force": 5.489
+        },
+        {
+          "time": 0.37,
+          "force": 4.921
+        },
+        {
+          "time": 0.475,
+          "force": 4.448
+        },
+        {
+          "time": 0.671,
+          "force": 4.258
+        },
+        {
+          "time": 0.702,
+          "force": 4.542
+        },
+        {
+          "time": 0.723,
+          "force": 4.164
+        },
+        {
+          "time": 0.85,
+          "force": 4.448
+        },
+        {
+          "time": 1.063,
+          "force": 4.353
+        },
+        {
+          "time": 1.211,
+          "force": 4.353
+        },
+        {
+          "time": 1.242,
+          "force": 4.069
+        },
+        {
+          "time": 1.303,
+          "force": 4.258
+        },
+        {
+          "time": 1.468,
+          "force": 4.353
+        },
+        {
+          "time": 1.656,
+          "force": 4.448
+        },
+        {
+          "time": 1.821,
+          "force": 4.448
+        },
+        {
+          "time": 1.834,
+          "force": 2.933
+        },
+        {
+          "time": 1.847,
+          "force": 1.325
+        },
+        {
+          "time": 1.86,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/69eb2379c7d63000021d8c29/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "C6-7",
+      "diameter": 18,
+      "length": 70,
+      "mass": 0.0241,
+      "propellant": 0.0108,
+      "impulse": 8.817238,
+      "burn": 1.86,
+      "delay": 7,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.031,
+          "force": 0.946
+        },
+        {
+          "time": 0.092,
+          "force": 4.826
+        },
+        {
+          "time": 0.139,
+          "force": 9.936
+        },
+        {
+          "time": 0.192,
+          "force": 14.09
+        },
+        {
+          "time": 0.209,
+          "force": 11.446
+        },
+        {
+          "time": 0.231,
+          "force": 7.381
+        },
+        {
+          "time": 0.248,
+          "force": 6.151
+        },
+        {
+          "time": 0.292,
+          "force": 5.489
+        },
+        {
+          "time": 0.37,
+          "force": 4.921
+        },
+        {
+          "time": 0.475,
+          "force": 4.448
+        },
+        {
+          "time": 0.671,
+          "force": 4.258
+        },
+        {
+          "time": 0.702,
+          "force": 4.542
+        },
+        {
+          "time": 0.723,
+          "force": 4.164
+        },
+        {
+          "time": 0.85,
+          "force": 4.448
+        },
+        {
+          "time": 1.063,
+          "force": 4.353
+        },
+        {
+          "time": 1.211,
+          "force": 4.353
+        },
+        {
+          "time": 1.242,
+          "force": 4.069
+        },
+        {
+          "time": 1.303,
+          "force": 4.258
+        },
+        {
+          "time": 1.468,
+          "force": 4.353
+        },
+        {
+          "time": 1.656,
+          "force": 4.448
+        },
+        {
+          "time": 1.821,
+          "force": 4.448
+        },
+        {
+          "time": 1.834,
+          "force": 2.933
+        },
+        {
+          "time": 1.847,
+          "force": 1.325
+        },
+        {
+          "time": 1.86,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/69eb2379c7d63000021d8c29/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "C11-3",
+      "diameter": 24,
+      "length": 70,
+      "mass": 0.03523,
+      "propellant": 0.012,
+      "impulse": 8.796057000000001,
+      "burn": 0.81,
+      "delay": 3,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.034,
+          "force": 1.692
+        },
+        {
+          "time": 0.066,
+          "force": 3.782
+        },
+        {
+          "time": 0.107,
+          "force": 7.566
+        },
+        {
+          "time": 0.145,
+          "force": 10.946
+        },
+        {
+          "time": 0.183,
+          "force": 14.832
+        },
+        {
+          "time": 0.214,
+          "force": 17.618
+        },
+        {
+          "time": 0.226,
+          "force": 18.213
+        },
+        {
+          "time": 0.256,
+          "force": 20.107
+        },
+        {
+          "time": 0.281,
+          "force": 21.208
+        },
+        {
+          "time": 0.298,
+          "force": 21.73
+        },
+        {
+          "time": 0.306,
+          "force": 20.206
+        },
+        {
+          "time": 0.323,
+          "force": 17.321
+        },
+        {
+          "time": 0.337,
+          "force": 14.931
+        },
+        {
+          "time": 0.358,
+          "force": 13.236
+        },
+        {
+          "time": 0.385,
+          "force": 11.947
+        },
+        {
+          "time": 0.413,
+          "force": 11.65
+        },
+        {
+          "time": 0.468,
+          "force": 10.946
+        },
+        {
+          "time": 0.539,
+          "force": 10.45
+        },
+        {
+          "time": 0.619,
+          "force": 10.648
+        },
+        {
+          "time": 0.683,
+          "force": 10.648
+        },
+        {
+          "time": 0.715,
+          "force": 10.648
+        },
+        {
+          "time": 0.726,
+          "force": 10.053
+        },
+        {
+          "time": 0.74,
+          "force": 8.163
+        },
+        {
+          "time": 0.758,
+          "force": 5.773
+        },
+        {
+          "time": 0.778,
+          "force": 3.185
+        },
+        {
+          "time": 0.795,
+          "force": 1.394
+        },
+        {
+          "time": 0.81,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000004e8/",
+      "provenance": "Contributed simulation samples"
+    },
+    {
+      "id": "D12-3",
+      "diameter": 24,
+      "length": 70,
+      "mass": 0.044,
+      "propellant": 0.0211,
+      "impulse": 16.8391395,
+      "burn": 1.65,
+      "delay": 3,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.049,
+          "force": 2.569
+        },
+        {
+          "time": 0.116,
+          "force": 9.369
+        },
+        {
+          "time": 0.184,
+          "force": 17.275
+        },
+        {
+          "time": 0.237,
+          "force": 24.258
+        },
+        {
+          "time": 0.282,
+          "force": 29.73
+        },
+        {
+          "time": 0.297,
+          "force": 27.01
+        },
+        {
+          "time": 0.311,
+          "force": 22.589
+        },
+        {
+          "time": 0.322,
+          "force": 17.99
+        },
+        {
+          "time": 0.348,
+          "force": 14.126
+        },
+        {
+          "time": 0.386,
+          "force": 12.099
+        },
+        {
+          "time": 0.442,
+          "force": 10.808
+        },
+        {
+          "time": 0.546,
+          "force": 9.876
+        },
+        {
+          "time": 0.718,
+          "force": 9.306
+        },
+        {
+          "time": 0.879,
+          "force": 9.105
+        },
+        {
+          "time": 1.066,
+          "force": 8.901
+        },
+        {
+          "time": 1.257,
+          "force": 8.698
+        },
+        {
+          "time": 1.436,
+          "force": 8.31
+        },
+        {
+          "time": 1.59,
+          "force": 8.294
+        },
+        {
+          "time": 1.612,
+          "force": 4.613
+        },
+        {
+          "time": 1.65,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000004ea/",
+      "provenance": "Contributed simulation samples"
+    },
+    {
+      "id": "D12-5",
+      "diameter": 24,
+      "length": 70,
+      "mass": 0.044,
+      "propellant": 0.0211,
+      "impulse": 16.8391395,
+      "burn": 1.65,
+      "delay": 5,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.049,
+          "force": 2.569
+        },
+        {
+          "time": 0.116,
+          "force": 9.369
+        },
+        {
+          "time": 0.184,
+          "force": 17.275
+        },
+        {
+          "time": 0.237,
+          "force": 24.258
+        },
+        {
+          "time": 0.282,
+          "force": 29.73
+        },
+        {
+          "time": 0.297,
+          "force": 27.01
+        },
+        {
+          "time": 0.311,
+          "force": 22.589
+        },
+        {
+          "time": 0.322,
+          "force": 17.99
+        },
+        {
+          "time": 0.348,
+          "force": 14.126
+        },
+        {
+          "time": 0.386,
+          "force": 12.099
+        },
+        {
+          "time": 0.442,
+          "force": 10.808
+        },
+        {
+          "time": 0.546,
+          "force": 9.876
+        },
+        {
+          "time": 0.718,
+          "force": 9.306
+        },
+        {
+          "time": 0.879,
+          "force": 9.105
+        },
+        {
+          "time": 1.066,
+          "force": 8.901
+        },
+        {
+          "time": 1.257,
+          "force": 8.698
+        },
+        {
+          "time": 1.436,
+          "force": 8.31
+        },
+        {
+          "time": 1.59,
+          "force": 8.294
+        },
+        {
+          "time": 1.612,
+          "force": 4.613
+        },
+        {
+          "time": 1.65,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000004ea/",
+      "provenance": "Contributed simulation samples"
+    },
+    {
+      "id": "D12-7",
+      "diameter": 24,
+      "length": 70,
+      "mass": 0.044,
+      "propellant": 0.0211,
+      "impulse": 16.8391395,
+      "burn": 1.65,
+      "delay": 7,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.049,
+          "force": 2.569
+        },
+        {
+          "time": 0.116,
+          "force": 9.369
+        },
+        {
+          "time": 0.184,
+          "force": 17.275
+        },
+        {
+          "time": 0.237,
+          "force": 24.258
+        },
+        {
+          "time": 0.282,
+          "force": 29.73
+        },
+        {
+          "time": 0.297,
+          "force": 27.01
+        },
+        {
+          "time": 0.311,
+          "force": 22.589
+        },
+        {
+          "time": 0.322,
+          "force": 17.99
+        },
+        {
+          "time": 0.348,
+          "force": 14.126
+        },
+        {
+          "time": 0.386,
+          "force": 12.099
+        },
+        {
+          "time": 0.442,
+          "force": 10.808
+        },
+        {
+          "time": 0.546,
+          "force": 9.876
+        },
+        {
+          "time": 0.718,
+          "force": 9.306
+        },
+        {
+          "time": 0.879,
+          "force": 9.105
+        },
+        {
+          "time": 1.066,
+          "force": 8.901
+        },
+        {
+          "time": 1.257,
+          "force": 8.698
+        },
+        {
+          "time": 1.436,
+          "force": 8.31
+        },
+        {
+          "time": 1.59,
+          "force": 8.294
+        },
+        {
+          "time": 1.612,
+          "force": 4.613
+        },
+        {
+          "time": 1.65,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000004ea/",
+      "provenance": "Contributed simulation samples"
+    },
+    {
+      "id": "E16-4",
+      "diameter": 29,
+      "length": 114,
+      "mass": 0.084,
+      "propellant": 0.04,
+      "impulse": 33.626793,
+      "burn": 2.09,
+      "delay": 4,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.15,
+          "force": 1.371
+        },
+        {
+          "time": 0.186,
+          "force": 1.92
+        },
+        {
+          "time": 0.206,
+          "force": 3.387
+        },
+        {
+          "time": 0.242,
+          "force": 5.587
+        },
+        {
+          "time": 0.252,
+          "force": 7.422
+        },
+        {
+          "time": 0.277,
+          "force": 8.705
+        },
+        {
+          "time": 0.333,
+          "force": 13.474
+        },
+        {
+          "time": 0.359,
+          "force": 15.858
+        },
+        {
+          "time": 0.374,
+          "force": 16.592
+        },
+        {
+          "time": 0.394,
+          "force": 18.609
+        },
+        {
+          "time": 0.435,
+          "force": 21.544
+        },
+        {
+          "time": 0.476,
+          "force": 24.661
+        },
+        {
+          "time": 0.521,
+          "force": 26.44
+        },
+        {
+          "time": 0.643,
+          "force": 21.72
+        },
+        {
+          "time": 0.725,
+          "force": 20.432
+        },
+        {
+          "time": 0.821,
+          "force": 19.511
+        },
+        {
+          "time": 0.898,
+          "force": 18.958
+        },
+        {
+          "time": 1.025,
+          "force": 18.219
+        },
+        {
+          "time": 1.142,
+          "force": 18.032
+        },
+        {
+          "time": 1.259,
+          "force": 17.844
+        },
+        {
+          "time": 1.396,
+          "force": 17.472
+        },
+        {
+          "time": 1.569,
+          "force": 17.282
+        },
+        {
+          "time": 1.757,
+          "force": 17.275
+        },
+        {
+          "time": 1.895,
+          "force": 17.086
+        },
+        {
+          "time": 2.027,
+          "force": 17.816
+        },
+        {
+          "time": 2.042,
+          "force": 12.494
+        },
+        {
+          "time": 2.052,
+          "force": 8.457
+        },
+        {
+          "time": 2.063,
+          "force": 4.97
+        },
+        {
+          "time": 2.09,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000007e6/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "F15-6",
+      "diameter": 29,
+      "length": 114,
+      "mass": 0.102,
+      "propellant": 0.06,
+      "impulse": 49.6087275,
+      "burn": 3.45,
+      "delay": 6,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.148,
+          "force": 7.638
+        },
+        {
+          "time": 0.228,
+          "force": 12.253
+        },
+        {
+          "time": 0.294,
+          "force": 16.391
+        },
+        {
+          "time": 0.353,
+          "force": 20.21
+        },
+        {
+          "time": 0.382,
+          "force": 22.756
+        },
+        {
+          "time": 0.419,
+          "force": 25.26
+        },
+        {
+          "time": 0.477,
+          "force": 23.074
+        },
+        {
+          "time": 0.52,
+          "force": 20.845
+        },
+        {
+          "time": 0.593,
+          "force": 19.093
+        },
+        {
+          "time": 0.688,
+          "force": 17.5
+        },
+        {
+          "time": 0.855,
+          "force": 16.225
+        },
+        {
+          "time": 1.037,
+          "force": 15.427
+        },
+        {
+          "time": 1.205,
+          "force": 14.948
+        },
+        {
+          "time": 1.423,
+          "force": 14.627
+        },
+        {
+          "time": 1.452,
+          "force": 15.741
+        },
+        {
+          "time": 1.503,
+          "force": 14.785
+        },
+        {
+          "time": 1.736,
+          "force": 14.623
+        },
+        {
+          "time": 1.955,
+          "force": 14.303
+        },
+        {
+          "time": 2.21,
+          "force": 14.141
+        },
+        {
+          "time": 2.494,
+          "force": 13.819
+        },
+        {
+          "time": 2.763,
+          "force": 13.338
+        },
+        {
+          "time": 3.12,
+          "force": 13.334
+        },
+        {
+          "time": 3.382,
+          "force": 13.013
+        },
+        {
+          "time": 3.404,
+          "force": 9.352
+        },
+        {
+          "time": 3.418,
+          "force": 4.895
+        },
+        {
+          "time": 3.45,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000007e5/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "E12-4",
+      "diameter": 24,
+      "length": 95,
+      "mass": 0.0587,
+      "propellant": 0.0359,
+      "impulse": 27.135916,
+      "burn": 2.44,
+      "delay": 4,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.052,
+          "force": 5.045
+        },
+        {
+          "time": 0.096,
+          "force": 9.91
+        },
+        {
+          "time": 0.196,
+          "force": 24.144
+        },
+        {
+          "time": 0.251,
+          "force": 31.351
+        },
+        {
+          "time": 0.287,
+          "force": 32.973
+        },
+        {
+          "time": 0.3,
+          "force": 29.91
+        },
+        {
+          "time": 0.344,
+          "force": 17.117
+        },
+        {
+          "time": 0.37,
+          "force": 14.414
+        },
+        {
+          "time": 0.4,
+          "force": 12.973
+        },
+        {
+          "time": 0.5,
+          "force": 11.712
+        },
+        {
+          "time": 0.6,
+          "force": 11.171
+        },
+        {
+          "time": 0.7,
+          "force": 10.631
+        },
+        {
+          "time": 0.8,
+          "force": 10.09
+        },
+        {
+          "time": 0.9,
+          "force": 9.73
+        },
+        {
+          "time": 1,
+          "force": 9.55
+        },
+        {
+          "time": 1.101,
+          "force": 9.91
+        },
+        {
+          "time": 1.2,
+          "force": 9.55
+        },
+        {
+          "time": 1.3,
+          "force": 9.73
+        },
+        {
+          "time": 1.4,
+          "force": 9.73
+        },
+        {
+          "time": 1.5,
+          "force": 9.73
+        },
+        {
+          "time": 1.6,
+          "force": 9.73
+        },
+        {
+          "time": 1.7,
+          "force": 9.55
+        },
+        {
+          "time": 1.8,
+          "force": 9.73
+        },
+        {
+          "time": 1.9,
+          "force": 9.73
+        },
+        {
+          "time": 2,
+          "force": 9.55
+        },
+        {
+          "time": 2.1,
+          "force": 9.55
+        },
+        {
+          "time": 2.2,
+          "force": 9.73
+        },
+        {
+          "time": 2.3,
+          "force": 9.19
+        },
+        {
+          "time": 2.375,
+          "force": 9.37
+        },
+        {
+          "time": 2.4,
+          "force": 5.95
+        },
+        {
+          "time": 2.44,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000007ad/",
+      "provenance": "Certification-derived samples"
+    },
+    {
+      "id": "E12-6",
+      "diameter": 24,
+      "length": 95,
+      "mass": 0.0587,
+      "propellant": 0.0359,
+      "impulse": 27.135916,
+      "burn": 2.44,
+      "delay": 6,
+      "curve": [
+        {
+          "time": 0,
+          "force": 0
+        },
+        {
+          "time": 0.052,
+          "force": 5.045
+        },
+        {
+          "time": 0.096,
+          "force": 9.91
+        },
+        {
+          "time": 0.196,
+          "force": 24.144
+        },
+        {
+          "time": 0.251,
+          "force": 31.351
+        },
+        {
+          "time": 0.287,
+          "force": 32.973
+        },
+        {
+          "time": 0.3,
+          "force": 29.91
+        },
+        {
+          "time": 0.344,
+          "force": 17.117
+        },
+        {
+          "time": 0.37,
+          "force": 14.414
+        },
+        {
+          "time": 0.4,
+          "force": 12.973
+        },
+        {
+          "time": 0.5,
+          "force": 11.712
+        },
+        {
+          "time": 0.6,
+          "force": 11.171
+        },
+        {
+          "time": 0.7,
+          "force": 10.631
+        },
+        {
+          "time": 0.8,
+          "force": 10.09
+        },
+        {
+          "time": 0.9,
+          "force": 9.73
+        },
+        {
+          "time": 1,
+          "force": 9.55
+        },
+        {
+          "time": 1.101,
+          "force": 9.91
+        },
+        {
+          "time": 1.2,
+          "force": 9.55
+        },
+        {
+          "time": 1.3,
+          "force": 9.73
+        },
+        {
+          "time": 1.4,
+          "force": 9.73
+        },
+        {
+          "time": 1.5,
+          "force": 9.73
+        },
+        {
+          "time": 1.6,
+          "force": 9.73
+        },
+        {
+          "time": 1.7,
+          "force": 9.55
+        },
+        {
+          "time": 1.8,
+          "force": 9.73
+        },
+        {
+          "time": 1.9,
+          "force": 9.73
+        },
+        {
+          "time": 2,
+          "force": 9.55
+        },
+        {
+          "time": 2.1,
+          "force": 9.55
+        },
+        {
+          "time": 2.2,
+          "force": 9.73
+        },
+        {
+          "time": 2.3,
+          "force": 9.19
+        },
+        {
+          "time": 2.375,
+          "force": 9.37
+        },
+        {
+          "time": 2.4,
+          "force": 5.95
+        },
+        {
+          "time": 2.44,
+          "force": 0
+        }
+      ],
+      "source": "https://www.thrustcurve.org/simfiles/5f4294d20002e900000007ad/",
+      "provenance": "Certification-derived samples"
+    }
+  ]
+}

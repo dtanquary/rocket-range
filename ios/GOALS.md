@@ -55,3 +55,7 @@ Measure sustained frame pacing, memory, thermal behavior, battery use, accessibi
 
 - Repository migration started. Existing web gameplay and documentation will remain independently runnable.
 - Unity 6000.3.11f1 and Xcode are available locally. Checking iOS Build Support and editor compilation before claiming native build readiness.
+
+- Browser isolation complete: TypeScript, all 19 browser tests, production build, and privacy check pass from `web/`; local Vite server remains available.
+- Native flight core implemented in C# with no Unity engine references. Nine Unity Edit Mode tests pass, including comparison of 82 calm/windy catalog flights against the browser reference to within 0.00002 in the checked SI metrics. Compatibility, immutable launch capture, ignition limits, recovery failures, and elapsed-time catch-up are covered.
+- Unity iOS Build Support is installed. Native visual scene and touch interface are in progress.
