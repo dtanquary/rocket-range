@@ -12,6 +12,7 @@ Shader "RocketRange/Grass"
    #pragma vertex vert
    #pragma fragment frag
    #pragma multi_compile_instancing
+   #pragma multi_compile_fog
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
    #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
    CBUFFER_START(UnityPerMaterial)

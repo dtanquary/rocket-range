@@ -95,7 +95,8 @@ namespace RocketRange.Editor
                     "Universal Render Pipeline/Lit",
                     "Universal Render Pipeline/Particles/Unlit",
                     "Skybox/Procedural",
-                    "RocketRange/Grass"
+                    "RocketRange/Grass",
+                    "RocketRange/FieldSky"
                 }
             )
             {

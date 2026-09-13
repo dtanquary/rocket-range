@@ -190,7 +190,7 @@ namespace RocketRange
             );
             Sound.Spatial(visual.Airframe.position, Camera.transform.position);
             bool burning = Session.Stage == Preparation.Flight && s.t < Motor.burn;
-            world.Present(Conditions, s, visual.Airframe.position, burning);
+            world.Present(Conditions, s, visual.Airframe.position, burning, Session.Stage);
             if (!burning && soundStarted && s.t >= Motor.burn)
                 Sound.Stop();
             if (Time.unscaledTime >= telemetryDue)

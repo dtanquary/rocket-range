@@ -238,6 +238,7 @@ namespace RocketRange
                 "Flight complete · inspect your result"
             };
             primary.text = titles[(int)stage];
+            primary.EnableInClassList("armed", stage == Preparation.Armed);
             status.text = messages[(int)stage];
             primary.SetEnabled(stage != Preparation.Igniting && stage != Preparation.Flight);
             secondary.text = stage == Preparation.Armed ? "Remove key & disarm" : "Unload rocket";

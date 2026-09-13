@@ -12,3 +12,5 @@ Read `../AGENTS.md`, `GOALS.md`, and `../web/SIMULATION.md` first.
 - Record actual editor/build/device verification in `GOALS.md`. Keep future fidelity goals separate from completed implementation.
 - Use SMAA with a single render-target sample for the current Simulator baseline. HDR MSAA produced render-pass attachment errors on the tested iOS Simulator; validate any quality change on both Simulator and hardware.
 - Keep procedural mesh normals outward-facing and destroy only runtime-owned meshes/materials. Imported assets and shared paint materials must remain reusable across fleet selections.
+- UI Toolkit's default theme styles `.unity-button`. Use scoped class selectors for overrides; a bare `button` selector loses to the theme. Review actual player screenshots, including disabled/armed states and engine-card wrapping.
+- Device Hub UI automation currently times out despite manual responsiveness. Native Mac screenshots are a useful rendering fallback, but its automated pointer locations also need verification. Do not change gameplay input to compensate for an unconfirmed automation-coordinate issue, or claim a successful playthrough from an attempted click.

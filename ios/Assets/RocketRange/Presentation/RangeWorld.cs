@@ -9,11 +9,14 @@ namespace RocketRange
     public sealed class RangeWorld : MonoBehaviour
     {
         Transform rod,
-            windsock;
+            windsock,
+            safetyKey,
+            launchButton;
         ParticleSystem smoke;
         Material smokeMaterial;
         Texture2D groundTexture,
-            smokeTexture;
+            smokeTexture,
+            woodTexture;
         readonly List<Matrix4x4[]> grassBatches = new List<Matrix4x4[]>(),
             treeBatches = new List<Matrix4x4[]>(),
             trunkBatches = new List<Matrix4x4[]>();
@@ -24,7 +27,10 @@ namespace RocketRange
             treeMaterial,
             trunkMaterial,
             terrainMaterial,
-            sky;
+            sky,
+            woodMaterial,
+            continuityMaterial;
+        Vector2 cloudDrift;
         public static readonly Vector3 PadOrigin = new Vector3(0, .14f, 0);
         public static readonly Vector3 BenchOrigin = new Vector3(1.15f, .76f, .45f);
 
@@ -39,11 +45,9 @@ namespace RocketRange
             RenderSettings.fogMode = FogMode.ExponentialSquared;
             RenderSettings.fogColor = Color("#ADC5CD");
             RenderSettings.fogDensity = .00035f;
-            sky = new Material(Shader.Find("Skybox/Procedural"));
-            sky.SetColor("_SkyTint", Color("#769ABC"));
-            sky.SetColor("_GroundColor", Color("#68765E"));
-            sky.SetFloat("_AtmosphereThickness", .72f);
-            sky.SetFloat("_Exposure", 1);
+            sky = new Material(Shader.Find("RocketRange/FieldSky"));
+            sky.SetColor("_Zenith", Color("#537DA9"));
+            sky.SetColor("_Horizon", Color("#B3CFDA"));
             RenderSettings.skybox = sky;
             var lightObject = new GameObject("Late morning sunlight");
             lightObject.transform.SetParent(transform);
@@ -52,10 +56,11 @@ namespace RocketRange
             sun.color = Color("#FFF1D4");
             sun.intensity = 1.7f;
             sun.shadows = LightShadows.Soft;
-            sun.shadowBias = .02f;
-            sun.shadowNormalBias = .25f;
+            sun.shadowBias = .008f;
+            sun.shadowNormalBias = .08f;
             lightObject.transform.rotation = Quaternion.Euler(42, -35, 0);
             RenderSettings.sun = sun;
+            sky.SetVector("_SunDirection", -lightObject.transform.forward);
             Ground();
             Vegetation();
             Equipment();
@@ -84,7 +89,7 @@ namespace RocketRange
                                     + Mathf.Sin(pz * .01f) * 12
                             ) * Mathf.Clamp01((d - 800) / 300);
                     vertices[i] = new Vector3(px, y - .012f, pz);
-                    uv[i] = new Vector2(px / 10, pz / 10);
+                    uv[i] = new Vector2(px / 2, pz / 2);
                     if (x < side && z < side)
                         indices.AddRange(
                             new[] { i, i + side + 1, i + 1, i + 1, i + side + 1, i + side + 2 }
@@ -107,15 +112,17 @@ namespace RocketRange
                 anisoLevel = 8
             };
             var pixels = new UnityEngine.Color[256 * 256];
+            var grain = new System.Random(83);
             for (int y = 0; y < 256; y++)
                 for (int x = 0; x < 256; x++)
                 {
                     float n =
-                        Mathf.PerlinNoise(x * .035f, y * .035f) * .7f
-                        + Mathf.PerlinNoise(x * .4f, y * .4f) * .3f;
+                        Mathf.PerlinNoise(x * .04f, y * .04f) * .45f
+                        + Mathf.PerlinNoise(x * .8f, y * .13f) * .3f
+                        + (float)grain.NextDouble() * .25f;
                     pixels[y * 256 + x] = UnityEngine.Color.Lerp(
-                        Color("#3C512A"),
-                        Color("#899465"),
+                        Color("#4F6140"),
+                        Color("#78865B"),
                         n
                     );
                 }
@@ -243,13 +250,52 @@ namespace RocketRange
             Cylinder("Steel launch rod", rod, .0018f, .0018f, 1, 0, steel, 16);
             var bench = Group("Preparation bench", transform);
             bench.localPosition = new Vector3(1.15f, 0, .45f);
-            Box(
-                "Workbench top",
-                bench,
-                new Vector3(0, .73f, 0),
-                new Vector3(.9f, .045f, .5f),
-                Paint("#B3AA86")
-            );
+            woodTexture = new Texture2D(256, 128, TextureFormat.RGB24, true)
+            {
+                name = "Weathered bench grain",
+                wrapMode = TextureWrapMode.Repeat,
+                anisoLevel = 4
+            };
+            var wood = new UnityEngine.Color[256 * 128];
+            for (int y = 0; y < 128; y++)
+                for (int x = 0; x < 256; x++)
+                {
+                    float grain = Mathf.PerlinNoise(x * .025f, y * .4f);
+                    float streak = Mathf.Sin(y * 2.2f + grain * 7) * .07f;
+                    wood[y * 256 + x] = UnityEngine.Color.Lerp(
+                        Color("#777B69"),
+                        Color("#B8B29A"),
+                        grain + streak
+                    );
+                }
+            woodTexture.SetPixels(wood);
+            woodTexture.Apply();
+            woodMaterial = new Material(Paint("#FFFFFF", 0, .16f));
+            woodMaterial.SetTexture("_BaseMap", woodTexture);
+            for (int plank = 0; plank < 3; plank++)
+            {
+                Box(
+                    "Weathered tabletop plank",
+                    bench,
+                    new Vector3(0, .73f, (plank - 1) * .167f),
+                    new Vector3(.9f, .045f, .162f),
+                    woodMaterial
+                );
+                foreach (float x in new[] { -.37f, .37f })
+                {
+                    var screw = Cylinder(
+                        "Recessed tabletop screw",
+                        bench,
+                        .003f,
+                        .003f,
+                        .0008f,
+                        .753f,
+                        steel,
+                        12
+                    );
+                    screw.transform.localPosition += new Vector3(x, 0, (plank - 1) * .167f);
+                }
+            }
             foreach (float x in new[] { -.37f, .37f })
                 foreach (float z in new[] { -.18f, .18f })
                     Box(
@@ -275,9 +321,38 @@ namespace RocketRange
                 new Vector3(.15f, .003f, .085f),
                 black
             );
-            Cylinder("Launch button", controller, .013f, .013f, .008f, .024f, red, 24);
-            var key = Cylinder("Safety key", controller, .002f, .002f, .025f, .025f, steel, 12);
-            key.transform.localPosition += new Vector3(.045f, 0, 0);
+            launchButton = Cylinder(
+                "Launch button",
+                controller,
+                .013f,
+                .013f,
+                .008f,
+                .024f,
+                red,
+                24
+            ).transform;
+            safetyKey = Group("Removable safety key", controller);
+            Cylinder("Safety key shaft", safetyKey, .002f, .002f, .025f, 0, steel, 12);
+            Box(
+                "Safety key handle",
+                safetyKey,
+                Vector3.up * .028f,
+                new Vector3(.023f, .008f, .009f),
+                steel
+            );
+            continuityMaterial = new Material(Paint("#354438", .1f, .45f));
+            continuityMaterial.EnableKeyword("_EMISSION");
+            var lamp = Cylinder(
+                "Continuity lamp",
+                controller,
+                .004f,
+                .004f,
+                .002f,
+                .025f,
+                continuityMaterial,
+                20
+            );
+            lamp.transform.localPosition += new Vector3(-.043f, 0, 0);
             Beam(
                 "Controller lead",
                 transform,
@@ -410,8 +485,31 @@ namespace RocketRange
             smoke.GetComponent<ParticleSystemRenderer>().sharedMaterial = smokeMaterial;
         }
 
-        public void Present(Conditions c, FlightState flight, Vector3 emitter, bool burning)
+        public void Present(
+            Conditions c,
+            FlightState flight,
+            Vector3 emitter,
+            bool burning,
+            Preparation preparation
+        )
         {
+            bool armed = preparation == Preparation.Armed || preparation == Preparation.Igniting;
+            bool inserted =
+                armed || preparation == Preparation.Flight || preparation == Preparation.Landed;
+            safetyKey.localPosition = inserted
+                ? new Vector3(.045f, .025f, 0)
+                : new Vector3(-.055f, .025f, .08f);
+            safetyKey.localRotation = inserted ? Quaternion.identity : Quaternion.Euler(0, 25, 90);
+            launchButton.localPosition = new Vector3(
+                0,
+                preparation == Preparation.Igniting ? .021f : .024f,
+                0
+            );
+            continuityMaterial.SetColor("_BaseColor", Color(armed ? "#E8BD62" : "#354438"));
+            continuityMaterial.SetColor(
+                "_EmissionColor",
+                armed ? Color("#C18C28") * 1.3f : UnityEngine.Color.black
+            );
             rod.localRotation = Quaternion.FromToRotation(
                 Vector3.up,
                 new Vector3(
@@ -436,6 +534,8 @@ namespace RocketRange
             velocity.enabled = true;
             velocity.space = ParticleSystemSimulationSpace.World;
             var wind = FlightPhysics.WindAt(c, Mathf.Max(1, emitter.y), Time.time);
+            cloudDrift += new Vector2((float)wind.x, (float)wind.z) * Time.deltaTime;
+            sky.SetVector("_WindOffset", new Vector4(cloudDrift.x, cloudDrift.y, 0, 0));
             velocity.x = (float)wind.x;
             velocity.z = (float)wind.z;
             velocity.y = .25f;
@@ -485,6 +585,9 @@ namespace RocketRange
                 var o in new Object[]
                 {
                     groundTexture,
+                    woodTexture,
+                    woodMaterial,
+                    continuityMaterial,
                     smokeTexture,
                     smokeMaterial,
                     grassMaterial,
