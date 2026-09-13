@@ -4,7 +4,7 @@
 
 | Check | Evidence |
 | --- | --- |
-| Flight rules and port parity | 14 passing Unity Edit Mode tests, including 82 saved browser-reference flights |
+| Flight rules and port parity | 15 passing Unity Edit Mode tests, including 82 saved browser-reference flights |
 | Native rendering | Mac player builds and opens; screenshots reviewed before and after the first field/interface polish |
 | iPad Simulator startup | ARM64 Unity export and unsigned Xcode Debug build succeed; app installs and launches |
 | Device Hub manually | User confirmed that the game is visible and responsive on the booted iPad |
@@ -19,7 +19,7 @@ Use an iPad landscape Simulator first, then an iPhone landscape Simulator and ph
 2. Open Field. Change wind, wind direction, gusts, rod tilt, and ballast. Confirm estimates update. Set the desired conditions before arming.
 3. Load the motor and place the rocket on the pad. Insert the safety key. Confirm the rendered controller key is inserted, its continuity lamp lights, and Launch turns red. Remove the key and confirm both the state and equipment feedback reverse.
 4. Select Ground, rearm, and press Launch. Confirm a short ignition delay, retained Ground selection, automatic flight, and locked physical controls. No reset, steering, throttle, pause, or speed control should appear.
-5. During ascent, switch to Follow, then Onboard. Confirm Onboard translates and rotates with the rocket. During recovery, return to Follow and observe the nose, cord, and canopy without camera jerks.
+5. During ascent, switch to Orbit: it should travel with the rocket, and drag/zoom should remain available. Check Follow, then Onboard; Onboard must translate and rotate with the rocket. During recovery, return to Follow and observe the nose, cord, and canopy without camera jerks. Repeat a flight starting in Orbit and confirm it never stays behind at the pad.
 6. Let the rocket land without intervention. Check the outcome, apogee, impact speed, and drift. Some configurations fail recovery; the game must report the simulated outcome honestly.
 7. Prepare another flight. Confirm setup becomes editable and no old smoke, recovery geometry, or sound persists into the next launch.
 8. Select Falcon 9, Saturn V, Mercury-Redstone, and Mercury-Atlas in turn. Check model visibility and framing. Complete at least one imported-model recovery flight.

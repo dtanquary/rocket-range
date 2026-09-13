@@ -97,9 +97,7 @@ namespace RocketRange
                 t.rotation = Quaternion.LookRotation(anchor - t.position, Vector3.up);
                 return;
             }
-            // Orbit stays at the range after launch; its controls change only the observer.
-            if (inFlight)
-                focus = RangeWorld.PadOrigin + Vector3.up * length * .5f;
+            // Keep the user's orbit around the airframe throughout ascent and recovery.
             var offset = Quaternion.Euler(-pitch, yaw, 0) * new Vector3(0, 0, distance);
             t.position = focus + offset;
             t.rotation = Quaternion.LookRotation(focus - t.position, Vector3.up);

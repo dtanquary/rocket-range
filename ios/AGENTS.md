@@ -9,6 +9,7 @@ Read `../AGENTS.md`, `GOALS.md`, and `../web/SIMULATION.md` first.
 - Keep generated Xcode projects, signing settings, Library/Temp/Logs, user preferences, and machine paths out of Git. No Apple development team or Unity service project IDs in tracked configuration.
 - A local build command is permitted. Do not add hosting, cloud builds, GitHub Actions, or deployment automation.
 - Keep the local macOS preview window resizable. Set this in both tracked player settings and the reproducible project configuration.
+- Orbit follows the airframe throughout flight while preserving the user's orbit angle and zoom. Never retarget Orbit to the pad at ignition. Ground retains its fixed observer position.
 - Test compatibility, ejection timing, drift, stability, immutable launches, camera independence, and finite catalog outcomes. Compare the port against saved browser reference results before changing the physical model.
 - Record actual editor/build/device verification in `GOALS.md`. Keep future fidelity goals separate from completed implementation.
 - Use SMAA with a single render-target sample for the current Simulator baseline. HDR MSAA produced render-pass attachment errors on the tested iOS Simulator; validate any quality change on both Simulator and hardware.

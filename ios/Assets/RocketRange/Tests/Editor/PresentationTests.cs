@@ -8,6 +8,114 @@ namespace RocketRange.Tests
     public class PresentationTests
     {
         [Test]
+        public void OrbitTracksRocketFromPadThroughLandingAndKeepsUserFraming()
+        {
+            var observer = new GameObject("Orbit observer");
+            var airframe = new GameObject("Flying airframe");
+            try
+            {
+                var catalog = JsonUtility.FromJson<Catalog>(
+                    Resources.Load<TextAsset>("Data/catalog").text
+                );
+                var rocket = catalog.rockets[0];
+                var session = new LaunchSession(
+                    rocket,
+                    catalog.Motor(rocket.recommended),
+                    Conditions.Default
+                );
+                var camera = observer.AddComponent<Camera>();
+                var rig = new RangeCamera(camera);
+                float length = (float)rocket.length;
+                rig.Frame(length);
+                rig.Orbit(new Vector2(75, 20));
+                rig.Zoom(60);
+                airframe.transform.position = RangeWorld.PadOrigin;
+                rig.Update(
+                    airframe.transform,
+                    length,
+                    (float)rocket.diameter,
+                    (float)rocket.chute,
+                    0,
+                    false,
+                    1f / 60
+                );
+                var offset = camera.transform.position - airframe.transform.position;
+                var orientation = camera.transform.rotation;
+                session.Load();
+                session.Place();
+                session.Arm();
+                session.Launch(.5);
+                bool sawAscent = false,
+                    sawRecovery = false;
+                for (int i = 0; i < 18000 && session.Stage != Preparation.Landed; i++)
+                {
+                    session.Advance(1d / 60);
+                    var state = session.State;
+                    airframe.transform.position =
+                        RangeWorld.PadOrigin
+                        + new Vector3(
+                            (float)state.position.x,
+                            (float)state.position.y,
+                            (float)state.position.z
+                        );
+                    rig.Update(
+                        airframe.transform,
+                        length,
+                        (float)rocket.diameter,
+                        (float)rocket.chute,
+                        (float)state.inflation,
+                        session.Stage == Preparation.Flight || session.Stage == Preparation.Landed,
+                        1f / 60
+                    );
+                    Assert.That(rig.Mode, Is.EqualTo(ViewMode.Orbit));
+                    Assert.Less(
+                        Vector3.Distance(
+                            camera.transform.position - airframe.transform.position,
+                            offset
+                        ),
+                        .0002f,
+                        $"Orbit lost the rocket at t={state.t:0.000}s ({state.phase})."
+                    );
+                    Assert.Less(Quaternion.Angle(camera.transform.rotation, orientation), .03f);
+                    sawAscent |= state.position.y > 10 && state.velocity.y > 0;
+                    sawRecovery |= state.phase == FlightPhase.Recovery;
+                }
+                Assert.IsTrue(sawAscent);
+                Assert.IsTrue(sawRecovery);
+                Assert.That(session.Stage, Is.EqualTo(Preparation.Landed));
+
+                // Drag and zoom must still affect the observer after a flight.
+                var beforeGesture = camera.transform.position;
+                rig.Orbit(new Vector2(80, -15));
+                rig.Zoom(100);
+                rig.Update(
+                    airframe.transform,
+                    length,
+                    (float)rocket.diameter,
+                    (float)rocket.chute,
+                    1,
+                    true,
+                    1f / 60
+                );
+                Assert.Greater(Vector3.Distance(beforeGesture, camera.transform.position), .1f);
+                Assert.Greater(Quaternion.Angle(orientation, camera.transform.rotation), 5);
+                var focus = airframe.transform.position + Vector3.up * length * .48f;
+                Assert.Greater(
+                    Vector3.Dot(
+                        camera.transform.forward,
+                        (focus - camera.transform.position).normalized
+                    ),
+                    .9999f
+                );
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(observer);
+                UnityEngine.Object.DestroyImmediate(airframe);
+            }
+        }
+
+        [Test]
         public void BodyMeshNormalsPointOutward()
         {
             var mesh = Geometry.Lathe(new[] { new Vector2(1, 0), new Vector2(1, 1) }, 32);

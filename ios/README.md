@@ -4,7 +4,7 @@ A native Unity game with a procedural launch field, 16 model rockets, compatible
 
 This is the first playable native foundation. [GOALS.md](GOALS.md) records completed verification separately from the planned fidelity, interaction, and device-performance work.
 
-Verified locally: 14 native tests pass, and the ARM64 iOS Simulator app builds in Xcode and launches on an iPad simulator. A Mac preview has been reviewed in screenshots, and the user confirmed manual iPad responsiveness. A controlled full-flight playthrough and physical-device testing remain pending. [TESTING.md](TESTING.md) records the checklist and current automation blocker.
+Verified locally: 15 native tests pass, and the ARM64 iOS Simulator app builds in Xcode and launches on an iPad simulator. A Mac preview has been reviewed in screenshots, and the user confirmed manual iPad responsiveness. A controlled full-flight playthrough and physical-device testing remain pending. [TESTING.md](TESTING.md) records the checklist and current automation blocker.
 
 ## Open and play
 
@@ -14,6 +14,8 @@ Verified locally: 14 native tests pass, and the ARM64 iOS Simulator app builds i
 4. Select a rocket and engine, load it, place it on the pad, insert the safety key, and launch. The flight is automatic after a random 0.25–1 second ignition delay.
 
 Drag the field to orbit, use a mouse wheel or pinch to zoom, and choose Orbit, Follow, Ground, or Onboard. Use Field to change wind, gusts, rod settings, or nose ballast before arming. Flight bench toggles the preparation panel. Cameras and sound remain available during flight; they cannot alter its physics.
+
+Orbit travels with the rocket while preserving your viewing angle and zoom. Follow adjusts its framing for recovery. Ground observes from a fixed position, and Onboard is attached to the airframe.
 
 The initial interface supports landscape iPhone and iPad layouts with safe-area handling. Real-device touch ergonomics, accessibility, thermal performance, and battery use still require measurement and refinement.
 
