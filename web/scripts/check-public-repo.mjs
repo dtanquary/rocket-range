@@ -1,6 +1,9 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 
+// Resolve the repository root even when invoked from a nested platform folder.
+process.chdir(execFileSync("git", ["rev-parse", "--show-toplevel"]).toString().trim());
+
 const git = (...args) =>
   execFileSync("git", args, { maxBuffer: 128 * 1024 * 1024 });
 const findings = new Set();

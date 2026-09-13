@@ -55,27 +55,3 @@ next-env.d.ts
 *.tar.gz
 
 *.tsbuildinfo
-
-# Native Unity and local Xcode build products
-/ios/[Ll]ibrary/
-/ios/[Tt]emp/
-/ios/[Oo]bj/
-/ios/[Ll]ogs/
-/ios/[Uu]ser[Ss]ettings/
-/ios/[Bb]uilds/
-/ios/[Bb]uild/
-/ios/[Mm]emoryCaptures/
-/ios/[Rr]ecordings/
-/ios/.vs/
-/ios/*.csproj
-/ios/*.sln
-/ios/*.slnx
-/ios/*.pidb
-/ios/*.booproj
-/ios/TestResults*.xml
-**/xcuserdata/
-**/DerivedData/
-*.mobileprovision
-*.provisionprofile
-*.ipa
-*.dSYM/
